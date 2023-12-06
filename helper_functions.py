@@ -2,9 +2,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from math import sin, cos, radians, pi, sqrt
 
-
-
-
 def two_standard_deviations(p):
     return sqrt(p) * 2
 
