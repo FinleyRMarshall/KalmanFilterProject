@@ -1,6 +1,11 @@
-
 import matplotlib.pyplot as plt
 from helper_functions import *
+
+
+def average(x, n, a):
+    # computes an average from last average a and n indexed at 0 for next item x
+    return (n * a + x) / (n + 1)
+
 
 def graph_x1(satellite, prediction_data, estimate_data):
     estimate_x1 = []
@@ -24,6 +29,7 @@ def graph_x1(satellite, prediction_data, estimate_data):
     plt.legend()
     plt.show()
 
+
 def graph_x1_and_p(satellite, prediction_data, estimate_data):
     estimate_x1 = []
     predictions_x1 = []
@@ -36,7 +42,6 @@ def graph_x1_and_p(satellite, prediction_data, estimate_data):
         p = p_prediction[0][0]
         p_above.append(x1_prediction + two_standard_deviations(p))
         p_below.append(x1_prediction - two_standard_deviations(p))
-
 
     for num in range(len(estimate_data)):
         x1_estimate, x2_estimate, p_estimate = estimate_data[num]
@@ -116,7 +121,6 @@ def graph_error(satellite, prediction_data, estimate_data):
         measurements_error.append(x1_measurement - true_x1)
         x1_estimate_error.append(x1_estimate - true_x1)
         x2_estimate_error.append(x2_estimate - true_x2)
-
 
     plt.title('Error of Measurements and X1, X2 Estimates')
     plt.plot(satellite.measurements_times, measurements_error, label='Measurements_error')
