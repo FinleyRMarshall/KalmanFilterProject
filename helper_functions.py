@@ -1,7 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from math import sin, cos, radians, pi, sqrt
-
+from Graph_functions import *
+from main import *
 
 def two_standard_deviations(p):
     return sqrt(p) * 2
@@ -19,110 +20,15 @@ def average(x, n, a):
 def loop_size(h, a, revolution):
     return int((360 // h * revolution) / (a * 360 / (2 * pi)))
 
+def satellite_analysis(satellites, revolutions, parameter, values):
 
-class Satellite:
-    def __init__(self, a=(pi * 2) / 360, h=10, q=2, r=1, radius=10, start_angle=None):
-        self.a = a
-        self.h = h
-        self.radius = radius
-        self.r = r
-        self.q = q
-        self.x1 = []
-        self.x2 = []
-        self.times = []
-        self.measurements_times = []
-        self.current_time = 0
-        self.start_angle = start_angle
-        self.measurements = []
-
-    def __random_start__(self):
-        #returns a random start cords for both x1 and x2
-        #if the start angle is not given
-        if self.start_angle is None:
-            self.start_angle = np.random.uniform(2 * pi)
-
-        x1_cord = self.radius * cos(self.start_angle)
-        x2_cord = self.radius * sin(self.start_angle)
-        return x1_cord, x2_cord
-
-    def next_cord(self, receive=True):
-        self.times.append(self.current_time)
-
-        if len(self.x1) == 0:
-            x1_cord, x2_cord = self.__random_start__()
-            self.x1.append(x1_cord)
-            self.x2.append(x2_cord)
-
-            x1_measurement = x1_cord + np.random.normal(0, self.r)
-            self.measurements.append(x1_measurement)
-            self.measurements_times.append(self.current_time)
-
-            self.current_time += self.h
-            return x1_measurement
-
-        trans_matrix = np.array([[cos(self.a * self.h), -sin(self.a * self.h)], [sin(self.a * self.h), cos(self.a * self.h)]])
-        last_cords = np.array([self.x1[-1], self.x2[-1]])
-
-        cords = np.dot(trans_matrix, last_cords)
-        x1_cord, x2_cord = cords
-        x1_noise, x2_noise = np.random.normal(0, self.q, 2)
-        x1_cord += x1_noise
-        x2_cord += x2_noise
-
-        self.x1.append(x1_cord)
-        self.x2.append(x2_cord)
-
-        if receive:
-            x1_measurement = x1_cord + np.random.normal(0, self.r)
-            self.measurements.append(x1_measurement)
-            self.measurements_times.append(self.current_time)
-        else:
-            x1_measurement = None
-
-        self.current_time += self.h
-        return x1_measurement if receive else None
-
-    def graph(self, show=True):
-        #graphs x1, x2 true cords and the measurement of x1
-        plt.title('Dimensions X1, X2 and X2 measurements of the satellite over time')
-        plt.plot(self.measurements_times, self.measurements, '.', label='Measurements')
-        plt.plot(self.times, self.x1, label='x1')
-        plt.plot(self.times, self.x2, label='x2')
-        if show:
-            plt.legend()
-            plt.show()
-
-"""
-loop_count = loop_size(h, a, revolutions)
-
-
-satellite = Satellite(a=a, h=h, q=q, r=r, radius=radius, start_angle=start_angle)
-
-prediction_data = []
-estimate_data = []
-
-for i in range(loop_count):
-    receive = receive_function(i)
-
-    z = satellite.next_cord(receive=receive)
-
-    x1, x2 = kf.predict()
-    prediction_data.append((x1, x2, kf.p))
-
-    if z is not None:
-        x1, x2 = kf.update(z)
-        estimate_data.append((x1, x2, kf.p))
-
-return satellite, prediction_data, estimate_data
-
-"""
-
-def satellite_Analysis(satellites, revolutions, parameter, values, receive_function):
+    data = []
 
     for value in values:
         radius = 10
-        satellite_parameters = {}
         a = (pi * 2) / 360
+
+        satellite_parameters = {}
         satellite_parameters['h'] = 10
         satellite_parameters['r'] = 2
         satellite_parameters['q'] = 0.1
@@ -133,9 +39,13 @@ def satellite_Analysis(satellites, revolutions, parameter, values, receive_funct
         r = satellite_parameters['r']
         q = satellite_parameters['q']
 
+        x1_average_abs_error = []
+        x2_average_abs_error = []
+        measurement_average_abs_error = []
 
+        objects = []
 
-        for j in satellites
+        for i in range(satellites):
             X = np.array([0, 0])
             F = np.array([[1, -a * h], [h * a, 1]])
             H = np.array([1, 0]).reshape(1, 2)
@@ -146,6 +56,32 @@ def satellite_Analysis(satellites, revolutions, parameter, values, receive_funct
             kf = KalmanFilter(f=F, h=H, q=Q, r=R, x=X, p=P)
             s = Satellite(a=a, h=h, q=q, r=r, radius=radius)
 
+            objects.append((kf, s))
+
+        for j in range(loop_size(h, a, revolutions)):
+            x1_error = 0
+            x2_error = 0
+            measurement_error = 0
+
+            for kf, s in objects:
+                z = s.next_cord()
+
+                x1, x2 = kf.predict()
+
+                if z is not None:
+                    x1, x2 = kf.update(z)
+
+                measurement_error += abs(s.x1[-1] - z)
+                x1_error +=  abs(s.x1[-1] - x1)
+                x2_error +=  abs(s.x2[-1] - x2)
+
+            measurement_average_abs_error.append(measurement_error / satellites)
+            x1_average_abs_error.append(x1_error / satellites)
+            x2_average_abs_error.append(x2_error / satellites)
 
 
-satellite_Analysis(3, 3, 'h', [5, 6], always_true)
+        data.append((measurement_average_abs_error, x1_average_abs_error, x2_average_abs_error, s.times[:], value))
+
+    graph_analysis(data, parameter)
+
+

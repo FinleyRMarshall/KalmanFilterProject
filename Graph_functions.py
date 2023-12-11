@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 from helper_functions import *
-
+from main import *
 
 def average_1(x, n, a):
     # computes an average from last average a and n indexed at 0 for next item x
@@ -168,5 +168,18 @@ def graph_average_error(satellite, prediction_data, estimate_data):
     plt.plot(satellite.measurements_times, average_measurements_error[1:], label='Average_measurements_error')
     plt.plot(satellite.measurements_times, average_x1_estimate_error[1:], label='Average_x1_estimate_error')
     plt.plot(satellite.measurements_times, average_x2_estimate_error[1:], label='Average_x2_estimate_error')
+    plt.legend()
+    plt.show()
+
+
+def graph_analysis(data, parameter):
+
+    plt.title("Analysis of {} different values for {}".format(len(data), parameter))
+    for i in data:
+        measurements, x1s, x2s, times, value = i
+        plt.plot(times, measurements, label='Measurements')
+        plt.plot( times, x1s, label = 'X1 for {} = {}'.format(parameter, value))
+        plt.plot( times, x2s, label = 'X2 for {} = {}'.format(parameter, value))
+
     plt.legend()
     plt.show()
