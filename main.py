@@ -71,7 +71,7 @@ class Satellite:
         plt.plot(self.times, self.x1, label='x1')
         plt.plot(self.times, self.x2, label='x2')
         if show:
-            plt.legend()
+            plt.legend(loc='upper left')
             plt.show()
 
 class KalmanFilter(object):
