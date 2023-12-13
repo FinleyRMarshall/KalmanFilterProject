@@ -20,11 +20,13 @@ def average(x, n, a):
 def loop_size(h, a, revolution):
     return int((360 // h * revolution) / (a * 360 / (2 * pi)))
 
-def satellite_analysis(satellites, revolutions, parameter, values):
+def satellite_analysis(satellites, revolutions, parameter, values, receive_values=None):
 
+    if receive_values == None:
+        receive_values = [always_true for i in range(len(values))]
     data = []
 
-    for value in values:
+    for num_value, value in enumerate(values):
         radius = 10
         a = (pi * 2) / 360
 
@@ -57,30 +59,45 @@ def satellite_analysis(satellites, revolutions, parameter, values):
             s = Satellite(a=a, h=h, q=q, r=r, radius=radius)
 
             objects.append((kf, s))
+        """
+        for i in range(loop_count):
+            receive = receive_function(i)
 
+            z = satellite.next_cord(receive=receive)
+
+            x1, x2 = kf.predict()
+            prediction_data.append((x1, x2, kf.p))
+
+            if z is not None:
+                x1, x2 = kf.update(z)
+                estimate_data.append((x1, x2, kf.p))
+"""
         for j in range(loop_size(h, a, revolutions)):
             x1_error = 0
             x2_error = 0
             measurement_error = 0
+            receive = receive_values[num_value](j)
 
-            for kf, s in objects:
-                z = s.next_cord()
+            for num, i in enumerate(objects):
+                kf, s = i
+                z = s.next_cord(receive=receive)
 
                 x1, x2 = kf.predict()
 
                 if z is not None:
                     x1, x2 = kf.update(z)
+                    measurement_error += abs(s.x1[-1] - z)
 
-                measurement_error += abs(s.x1[-1] - z)
                 x1_error +=  abs(s.x1[-1] - x1)
                 x2_error +=  abs(s.x2[-1] - x2)
 
-            measurement_average_abs_error.append(measurement_error / satellites)
+            if receive:
+                measurement_average_abs_error.append(measurement_error / satellites)
             x1_average_abs_error.append(x1_error / satellites)
             x2_average_abs_error.append(x2_error / satellites)
 
 
-        data.append((measurement_average_abs_error, x1_average_abs_error, x2_average_abs_error, s.times[:], value))
+        data.append((measurement_average_abs_error, x1_average_abs_error, x2_average_abs_error, s.times[:], s.measurements_times[:], value))
 
     graph_analysis(data, parameter)
 

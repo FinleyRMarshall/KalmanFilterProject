@@ -115,7 +115,7 @@ def graph_x2_and_p(satellite, prediction_data, estimate_data):
     plt.legend(loc='upper left')
     plt.show()
 
-
+"""
 def graph_error(satellite, prediction_data, estimate_data):
     measurements_error = []
     x1_estimate_error = []
@@ -171,49 +171,84 @@ def graph_average_error(satellite, prediction_data, estimate_data):
     plt.plot(satellite.measurements_times, average_x2_estimate_error[1:], label='Average_x2_estimate_error')
     plt.legend(loc='upper left')
     plt.show()
-
+"""
 
 def graph_analysis(data, parameter):
 
     plt.title("Analysis of {} different values for {}".format(len(data), parameter))
-    x1_colours = ['#0ef1f0', '#1f56e0', '#2015ea']
-    x2_colours = ['#f10e92', '#f21e0d', '#eb8214']
-
+    symbols = ['.', 'P', '^']
 
     for num, i in enumerate(data):
-        measurements, x1s, x2s, times, value = i
-        plt.plot(times[10:], measurements[10:], '#09f61d')
-        x1_colour = x1_colours[num % 3]
-        x2_colour = x2_colours[num % 3]
-        plt.plot( times[10:], x1s[10:], x1_colour, label = 'X1 for {} = {}'.format(parameter, value))
-        plt.plot( times[10:], x2s[10:], x2_colour, label = 'X2 for {} = {}'.format(parameter, value))
+        measurements, x1s, x2s, times, measurements_times, value = i
+        plt.plot(measurements_times, measurements, symbols[num % 3] + 'b', label = 'Measurements for {} = {}'.format(parameter, value))
+        plt.plot( times, x1s, symbols[num % 3] + 'g', label = 'X1 for {} = {}'.format(parameter, value))
+        plt.plot( times, x2s, symbols[num % 3] + 'r', label = 'X2 for {} = {}'.format(parameter, value))
 
     plt.legend(loc='upper left')
     plt.show()
 
-def graph_x1_x2_error(satellite, prediction_data, estimate_data):
+def graph_error(satellite, prediction_data, estimate_data, measurement_error=None):
 
     x1_error = []
     x2_error = []
+    measurement_error = []
     offset = 0
 
     for num, time in enumerate(satellite.times):
         x1_prediction, x2_prediction, p_prediction = prediction_data[num]
+        true_x1 = satellite.x1[num]
+        true_x2 = satellite.x2[num]
 
         if time in satellite.measurements_times:
             x1_estimate, x2_estimate, p_estimate = estimate_data[num - offset]
+            measurement_error.append(true_x1 - satellite.measurements[num - offset])
         else:
             offset += 1
             x1_estimate, x2_estimate, p_estimate = x1_prediction, x2_prediction, p_prediction
 
-        true_x1 = satellite.x1[num]
-        true_x2 = satellite.x2[num]
+
         x1_error.append(true_x1 - x1_estimate)
         x2_error.append(true_x2 - x2_estimate)
 
-    plt.title('Dimension X2: Measurements, Prediction and P of X2 over time')
+    plt.title('Error of Measurements and X1, X2')
+    plt.plot(satellite.measurements_times, measurement_error, label='Measurement Error')
     plt.plot(satellite.times, x1_error, label='X1 Error')
     plt.plot(satellite.times, x2_error, label='X2 Error')
 
+    plt.legend(loc='upper left')
+    plt.show()
+
+
+def graph_average_error(satellite, prediction_data, estimate_data, measurement_error=None):
+
+    average_x1_estimate_error = [0]
+    average_x2_estimate_error = [0]
+    average_measurements_error = [0]
+    offset = 0
+
+    for num, time in enumerate(satellite.times):
+        x1_prediction, x2_prediction, p_prediction = prediction_data[num]
+        true_x1 = satellite.x1[num]
+        true_x2 = satellite.x2[num]
+
+        if time in satellite.measurements_times:
+            x1_estimate, x2_estimate, p_estimate = estimate_data[num - offset]
+            x1_measurement = satellite.measurements[num - offset]
+            a = average_measurements_error[-1]
+            average_measurements_error.append(average_1(abs(x1_measurement - true_x1), num, a))
+        else:
+            offset += 1
+            x1_estimate, x2_estimate, p_estimate = x1_prediction, x2_prediction, p_prediction
+
+        a = average_x1_estimate_error[-1]
+        average_x1_estimate_error.append(average_1(abs(x1_estimate - true_x1), num, a))
+
+        a = average_x2_estimate_error[-1]
+        average_x2_estimate_error.append(average_1(abs(x2_estimate - true_x2), num, a))
+
+    plt.title('Average Error of Measurements and X1, X2')
+    plt.plot(satellite.measurements_times, average_measurements_error[1:], label='Average_measurements_error')
+    plt.plot(satellite.times, average_x1_estimate_error[1:], label='Average_x1_estimate_error')
+    plt.plot(satellite.times, average_x2_estimate_error[1:], label='Average_x2_estimate_error')
     plt.legend(loc='upper left')
     plt.show()
