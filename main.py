@@ -99,6 +99,7 @@ class KalmanFilter(object):
         self.p = np.dot(np.identity(len(self.x)) - np.dot(k, self.h), self.p)
         return self.x
 
+
 def two_standard_deviations(p):
     return sqrt(p) * 2
 

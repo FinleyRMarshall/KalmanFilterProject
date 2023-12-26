@@ -4,6 +4,7 @@ from math import sin, cos, radians, pi, sqrt
 from Graph_functions import *
 from main import *
 
+
 def two_standard_deviations(p):
     return sqrt(p) * 2
 
@@ -22,7 +23,6 @@ def loop_size(h, a, revolution):
 
 
 def satellite_analysis(satellites, revolutions, parameter, values, receive_values=None):
-
     if receive_values == None:
         receive_values = [always_true for i in range(len(values))]
     data = []
@@ -89,17 +89,15 @@ def satellite_analysis(satellites, revolutions, parameter, values, receive_value
                     x1, x2 = kf.update(z)
                     measurement_error += abs(s.x1[-1] - z)
 
-                x1_error +=  abs(s.x1[-1] - x1)
-                x2_error +=  abs(s.x2[-1] - x2)
+                x1_error += abs(s.x1[-1] - x1)
+                x2_error += abs(s.x2[-1] - x2)
 
             if receive:
                 measurement_average_abs_error.append(measurement_error / satellites)
             x1_average_abs_error.append(x1_error / satellites)
             x2_average_abs_error.append(x2_error / satellites)
 
-
-        data.append((measurement_average_abs_error, x1_average_abs_error, x2_average_abs_error, s.times[:], s.measurements_times[:], value))
+        data.append((measurement_average_abs_error, x1_average_abs_error, x2_average_abs_error, s.times[:],
+                     s.measurements_times[:], value))
 
     graph_analysis(data, parameter)
-
-
