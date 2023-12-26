@@ -20,6 +20,7 @@ def average(x, n, a):
 def loop_size(h, a, revolution):
     return int((360 // h * revolution) / (a * 360 / (2 * pi)))
 
+
 def satellite_analysis(satellites, revolutions, parameter, values, receive_values=None):
 
     if receive_values == None:

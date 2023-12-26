@@ -23,10 +23,10 @@ def graph_x1(satellite, prediction_data, estimate_data):
         estimate_x1.append(x1_estimate)
 
     plt.title('Dimension X1: Measurements, Prediction and Estimate of X1 over time')
+    plt.plot(satellite.measurements_times, satellite.measurements, '.', label='Measurements')
     plt.plot(satellite.times, satellite.x1, label='X1')
     plt.plot(satellite.measurements_times, estimate_x1, label='Estimate_x1')
-    plt.plot(satellite.measurements_times, satellite.measurements, 'o', label='Measurements')
-    plt.plot(satellite.times, predictions_x1, '+', label='Predictions_x1')
+    #plt.plot(satellite.times, predictions_x1, '+', label='Predictions_x1')
     plt.legend(loc='upper left')
     plt.show()
 
@@ -53,11 +53,11 @@ def graph_x1_and_p(satellite, prediction_data, estimate_data):
         p_above.append(x1_estimate + two_standard_deviations(p))
         p_below.append(x1_estimate - two_standard_deviations(p))
 
-    plt.title('Dimension X1: Measurements, Prediction and P of X1 over time')
-    plt.plot(satellite.times, satellite.x1, '.', label='X1')
-    plt.plot(satellite.times, estimate_x1, label='Estimate_x1')
-    plt.plot(satellite.times, p_above, label='Two Standard deviations above')
-    plt.plot(satellite.times, p_below, label='Two Standard deviations below')
+    plt.title('True Values vs Estimate Values of X1')
+    plt.plot(satellite.times, satellite.x1, label='True X1')
+    plt.plot(satellite.times, estimate_x1, label='Estimate of X1')
+    plt.plot(satellite.times, p_above, label='Two Standard Deviations above')
+    plt.plot(satellite.times, p_below, label='Two Standard Deviations below')
 
     plt.legend(loc='upper left')
     plt.show()
@@ -78,7 +78,7 @@ def graph_x2(satellite, prediction_data, estimate_data):
     plt.title('Dimension X2: Measurements, Estimate and P of X2 over time')
     plt.plot(satellite.times, satellite.x2, label='X2')
     plt.plot(satellite.measurements_times, estimate_x2, label='Estimate_x2')
-    plt.plot(satellite.times, predictions_x2, '+', label='Predictions_x2')
+    #plt.plot(satellite.times, predictions_x2, '+', label='Predictions_x2')
     plt.legend(loc='upper left')
     plt.show()
 
@@ -106,11 +106,11 @@ def graph_x2_and_p(satellite, prediction_data, estimate_data):
         p_above.append(x2_estimate + two_standard_deviations(p))
         p_below.append(x2_estimate - two_standard_deviations(p))
 
-    plt.title('Dimension X2: Measurements, Prediction and P of X2 over time')
-    plt.plot(satellite.times, satellite.x2, '.', label='X1')
-    plt.plot(satellite.times, predictions_x2, label='Prediction_x2')
-    plt.plot(satellite.times, p_above, label='Two Standard deviations above')
-    plt.plot(satellite.times, p_below, label='Two Standard deviations below')
+    plt.title('True Values vs Estimate Values of X2')
+    plt.plot(satellite.times, satellite.x2, label='X2')
+    plt.plot(satellite.times, estimate_x2, label='Estimate of X2')
+    plt.plot(satellite.times, p_above, label='Two Standard Deviations above')
+    plt.plot(satellite.times, p_below, label='Two Standard Deviations below')
 
     plt.legend(loc='upper left')
     plt.show()
@@ -246,7 +246,7 @@ def graph_average_error(satellite, prediction_data, estimate_data, measurement_e
         a = average_x2_estimate_error[-1]
         average_x2_estimate_error.append(average_1(abs(x2_estimate - true_x2), num, a))
 
-    plt.title('Average Error of Measurements and X1, X2')
+    plt.title('Average Distance of Measurements and X1, X2 Estimates')
     plt.plot(satellite.measurements_times, average_measurements_error[1:], label='Average_measurements_error')
     plt.plot(satellite.times, average_x1_estimate_error[1:], label='Average_x1_estimate_error')
     plt.plot(satellite.times, average_x2_estimate_error[1:], label='Average_x2_estimate_error')
