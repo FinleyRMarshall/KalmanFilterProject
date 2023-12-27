@@ -50,14 +50,14 @@ def graph_x1_and_p(satellite, prediction_data, estimate_data):
 
         p = p_estimate[0][0]
         estimate_x1.append(x1_estimate)
-        p_above.append(x1_estimate + two_standard_deviations(p))
-        p_below.append(x1_estimate - two_standard_deviations(p))
+        p_above.append(x1_estimate + three_standard_deviations(p))
+        p_below.append(x1_estimate - three_standard_deviations(p))
 
     plt.title('True Values vs Estimate Values of X1')
     plt.plot(satellite.times, satellite.x1, label='True X1')
     plt.plot(satellite.times, estimate_x1, label='Estimate of X1')
-    plt.plot(satellite.times, p_above, label='Two Standard Deviations above')
-    plt.plot(satellite.times, p_below, label='Two Standard Deviations below')
+    plt.plot(satellite.times, p_above, label='Upper Bound')
+    plt.plot(satellite.times, p_below, label='Lower Bound')
 
     plt.legend(loc='upper left')
     plt.show()
@@ -103,14 +103,14 @@ def graph_x2_and_p(satellite, prediction_data, estimate_data):
 
         p = p_estimate[1][1]
         estimate_x2.append(x2_estimate)
-        p_above.append(x2_estimate + two_standard_deviations(p))
-        p_below.append(x2_estimate - two_standard_deviations(p))
+        p_above.append(x2_estimate + three_standard_deviations(p))
+        p_below.append(x2_estimate - three_standard_deviations(p))
 
     plt.title('True Values vs Estimate Values of X2')
     plt.plot(satellite.times, satellite.x2, label='X2')
     plt.plot(satellite.times, estimate_x2, label='Estimate of X2')
-    plt.plot(satellite.times, p_above, label='Two Standard Deviations above')
-    plt.plot(satellite.times, p_below, label='Two Standard Deviations below')
+    plt.plot(satellite.times, p_above, label='Upper Bound')
+    plt.plot(satellite.times, p_below, label='Lower Bound')
 
     plt.legend(loc='upper left')
     plt.show()

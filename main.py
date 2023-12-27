@@ -100,8 +100,8 @@ class KalmanFilter(object):
         return self.x
 
 
-def two_standard_deviations(p):
-    return sqrt(p) * 2
+def three_standard_deviations(p):
+    return sqrt(p) * 3
 
 
 def always_true(i):

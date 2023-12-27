@@ -5,8 +5,8 @@ from Graph_functions import *
 from main import *
 
 
-def two_standard_deviations(p):
-    return sqrt(p) * 2
+def three_standard_deviations(p):
+    return sqrt(p) * 3
 
 
 def always_true(i):
@@ -60,19 +60,8 @@ def satellite_analysis(satellites, revolutions, parameter, values, receive_value
             s = Satellite(a=a, h=h, q=q, r=r, radius=radius)
 
             objects.append((kf, s))
-        """
-        for i in range(loop_count):
-            receive = receive_function(i)
 
-            z = satellite.next_cord(receive=receive)
 
-            x1, x2 = kf.predict()
-            prediction_data.append((x1, x2, kf.p))
-
-            if z is not None:
-                x1, x2 = kf.update(z)
-                estimate_data.append((x1, x2, kf.p))
-"""
         for j in range(loop_size(h, a, revolutions)):
             x1_error = 0
             x2_error = 0
