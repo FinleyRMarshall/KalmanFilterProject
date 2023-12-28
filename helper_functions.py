@@ -4,30 +4,14 @@ from math import sin, cos, radians, pi, sqrt
 from Graph_functions import *
 from main import *
 
-
-def three_standard_deviations(p):
-    return sqrt(p) * 3
-
-
-def always_true(i):
-    return True
-
-
-def average(x, n, a):
-    # computes an average from last average a and n indexed at 0 for next item x
-    return (n * a + x) / (n + 1)
-
-
-def loop_size(h, a, revolution):
-    return int((360 // h * revolution) / (a * 360 / (2 * pi)))
-
-
 def satellite_analysis(satellites, revolutions, parameter, values, receive_values=None):
+    # Runs the satellite analysis, quite similar to satellite_example
     if receive_values == None:
         receive_values = [always_true for i in range(len(values))]
     data = []
 
     for num_value, value in enumerate(values):
+        # assigning the values for the satellites
         radius = 10
         a = (pi * 2) / 360
 
@@ -42,12 +26,14 @@ def satellite_analysis(satellites, revolutions, parameter, values, receive_value
         r = satellite_parameters['r']
         q = satellite_parameters['q']
 
+        # for graphing
         x1_average_abs_error = []
         x2_average_abs_error = []
         measurement_average_abs_error = []
 
         objects = []
 
+        # create all the satellites
         for i in range(satellites):
             X = np.array([0, 0])
             F = np.array([[1, -a * h], [h * a, 1]])
@@ -61,13 +47,13 @@ def satellite_analysis(satellites, revolutions, parameter, values, receive_value
 
             objects.append((kf, s))
 
-
+        # run the model
         for j in range(loop_size(h, a, revolutions)):
             x1_error = 0
             x2_error = 0
             measurement_error = 0
             receive = receive_values[num_value](j)
-
+            # for each satellite, and model for each satellite
             for num, i in enumerate(objects):
                 kf, s = i
                 z = s.next_cord(receive=receive)
