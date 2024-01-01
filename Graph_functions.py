@@ -3,6 +3,7 @@ import numpy as np
 from helper_functions import *
 from main import *
 
+
 def average_1(x, n, a):
     # computes an average from last average a and n indexed at 0 for next item x
     return (n * a + x) / (n + 1)
