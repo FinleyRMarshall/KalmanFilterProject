@@ -11,7 +11,7 @@ def satellite_analysis(satellites, revolutions, parameter, values, receive_value
     data = []
 
     for num_value, value in enumerate(values):
-        # assigning the values for the satellites
+        # Assigning the values for the satellites
         radius = 10
         a = (pi * 2) / 360
 
@@ -26,14 +26,14 @@ def satellite_analysis(satellites, revolutions, parameter, values, receive_value
         r = satellite_parameters['r']
         q = satellite_parameters['q']
 
-        # for graphing
+        # For graphing
         x1_average_abs_error = []
         x2_average_abs_error = []
         measurement_average_abs_error = []
 
         objects = []
 
-        # create all the satellites
+        # Create all the satellites
         for i in range(satellites):
             X = np.array([0, 0])
             F = np.array([[1, -a * h], [h * a, 1]])
@@ -47,13 +47,13 @@ def satellite_analysis(satellites, revolutions, parameter, values, receive_value
 
             objects.append((kf, s))
 
-        # run the model
+        # Run the model
         for j in range(loop_size(h, a, revolutions)):
             x1_error = 0
             x2_error = 0
             measurement_error = 0
             receive = receive_values[num_value](j)
-            # for each satellite, and model for each satellite
+            # For each satellite, and model for each satellite
             for num, i in enumerate(objects):
                 kf, s = i
                 z = s.next_cord(receive=receive)

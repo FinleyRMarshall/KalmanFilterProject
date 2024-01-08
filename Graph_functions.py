@@ -5,13 +5,13 @@ from main import *
 
 
 def average_1(x, n, a):
-    # computes an average from last average a and n indexed at 0 for next item x
+    # Computes an average from last average a and n indexed at 0 for next item x
     return (n * a + x) / (n + 1)
 
 
 def graph_x1(satellite, prediction_data, estimate_data):
-    # graphs the x1 true values, measurements and the estimate
-    # graph_x1_and_p is used
+    # Graphs the x1 true values, measurements and the estimate
+    # Graph_x1_and_p is used
     estimate_x1 = []
     predictions_x1 = []
 
@@ -35,8 +35,8 @@ def graph_x1(satellite, prediction_data, estimate_data):
 
 
 def graph_x1_and_p(satellite, prediction_data, estimate_data):
-    # graphs true x1, estimate, and confidence interval
-    # given the satellite object and data from the model
+    # Graphs true x1, estimate, and confidence interval
+    # Given the satellite object and data from the model
     estimate_x1 = []
     predictions_x1 = []
     p_above = []
@@ -69,8 +69,8 @@ def graph_x1_and_p(satellite, prediction_data, estimate_data):
 
 
 def graph_x2(satellite, prediction_data, estimate_data):
-    # graphs the x1 true values and the estimate
-    # graph_x2_and_p is used
+    # Graphs the x1 true values and the estimate
+    # Graph_x2_and_p is used
     estimate_x2 = []
     predictions_x2 = []
 
@@ -91,8 +91,8 @@ def graph_x2(satellite, prediction_data, estimate_data):
 
 
 def graph_x2_and_p(satellite, prediction_data, estimate_data):
-    # graphs true x2, estimate, and confidence interval
-    # given the satellite object and data from the model
+    # Graphs true x2, estimate, and confidence interval
+    # Given the satellite object and data from the model
     estimate_x2 = []
     predictions_x2 = []
     p_above = []
@@ -126,7 +126,7 @@ def graph_x2_and_p(satellite, prediction_data, estimate_data):
 
 
 def graph_analysis(data, parameter):
-    # graphs the analysis data given from satellite_analysis in helper functions
+    # Graphs the analysis data given from satellite_analysis in helper functions
     plt.title("Analysis of {} different values for {}".format(len(data), parameter))
     symbols = ['.', 'P', '^']
 
@@ -140,7 +140,7 @@ def graph_analysis(data, parameter):
     plt.show()
 
 def graph_error(satellite, prediction_data, estimate_data):
-    # graphs the difference of measurements, x1 estimate and x2 estimates from their true values.
+    # Graphs the difference of measurements, x1 estimate and x2 estimates from their true values.
     x1_error = []
     x2_error = []
     measurement_error = []
@@ -172,7 +172,7 @@ def graph_error(satellite, prediction_data, estimate_data):
 
 
 def graph_average_error(satellite, prediction_data, estimate_data):
-    # graphs the average distance of measurements, x1 estimate and x2 estimates from their true values.
+    # Graphs the average distance of measurements, x1 estimate and x2 estimates from their true values.
     average_x1_estimate_error = [0]
     average_x2_estimate_error = [0]
     average_measurements_error = [0]
