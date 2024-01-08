@@ -4,7 +4,7 @@ from helper_functions import *
 from main import *
 
 
-def average_1(x, n, a):
+def average(x, n, a):
     # Computes an average from last average a and n indexed at 0 for next item x
     return (n * a + x) / (n + 1)
 
@@ -187,16 +187,16 @@ def graph_average_error(satellite, prediction_data, estimate_data):
             x1_estimate, x2_estimate, p_estimate = estimate_data[num - offset]
             x1_measurement = satellite.measurements[num - offset]
             a = average_measurements_error[-1]
-            average_measurements_error.append(average_1(abs(x1_measurement - true_x1), num, a))
+            average_measurements_error.append(average(abs(x1_measurement - true_x1), num, a))
         else:
             offset += 1
             x1_estimate, x2_estimate, p_estimate = x1_prediction, x2_prediction, p_prediction
 
         a = average_x1_estimate_error[-1]
-        average_x1_estimate_error.append(average_1(abs(x1_estimate - true_x1), num, a))
+        average_x1_estimate_error.append(average(abs(x1_estimate - true_x1), num, a))
 
         a = average_x2_estimate_error[-1]
-        average_x2_estimate_error.append(average_1(abs(x2_estimate - true_x2), num, a))
+        average_x2_estimate_error.append(average(abs(x2_estimate - true_x2), num, a))
 
     plt.title('Average Distance of Measurements and X1, X2 Estimates')
     plt.plot(satellite.measurements_times, average_measurements_error[1:], label='Measurements')

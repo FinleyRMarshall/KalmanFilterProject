@@ -110,3 +110,40 @@ def always_true(i):
 
 def loop_size(h, a, revolution):
     return int((360 // h * revolution) / (a * 360 / (2 * pi)))
+
+
+def rc_car_control_input_model(x,  h, theta, alpha):
+    # Controls for the rc car
+    # The explanation for this function can be found in the control input model section
+    x_1, x_2, v_1, v_2 = x
+    mag_v = sqrt(v_1**2 + v_2**2)
+    scalar_factor = 1 + (alpha * h)/(mag_v)
+    new_x_1 = h/2*(-v_1 + scalar_factor*(v_1*cos(theta) - v_2*sin(theta)))
+    new_x_2 = h/2*(-v_2 + scalar_factor*(v_1*sin(theta) + v_2*cos(theta)))
+    new_v_1 = scalar_factor*(v_1*cos(theta) - v_2*sin(theta)) - v_1
+    new_v_2 = scalar_factor*(v_1*sin(theta) + v_2*cos(theta)) - v_2
+    return np.array([new_x_1, new_x_2, new_v_1, new_v_2])
+
+class RC_Car_KalmanFilter(object):
+    def __init__(self, f, h, q, r, p, x, time_step):
+        self.f = f
+        self.h = h
+        self.q = q
+        self.r = r
+        self.p = p
+        self.x = x
+        self.time_step = time_step
+        self.n = f.shape[1]
+
+    def predict(self, theta, alpha):
+        self.x = np.dot(self.f, self.x) + rc_car_control_input_model(self.x, self.time_step, theta, alpha)
+        self.p = np.dot(np.dot(self.f, self.p), self.f.T) + self.q
+        return self.x
+
+    def update(self, z):
+        y = z - np.dot(self.h, self.x)
+        s = np.dot(np.dot(self.h, self.p), self.h.T) + self.r
+        k = np.dot(np.dot(self.p, self.h.T), np.linalg.inv(s))
+        self.x = self.x + np.dot(k,y)
+        self.p = np.dot(np.identity(len(self.x)) - np.dot(k, self.h), self.p)
+        return self.x
