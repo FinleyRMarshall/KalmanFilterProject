@@ -204,3 +204,60 @@ def graph_average_error(satellite, prediction_data, estimate_data):
     plt.plot(satellite.times, average_x2_estimate_error[1:], label='X2')
     plt.legend(loc='upper left')
     plt.show()
+
+
+def graph_car_vs_model(car, car_data):
+    car_x1 = []
+    car_x2 = []
+    car_v1 = []
+    car_v2 = []
+
+    x1_measurements = []
+    x2_measurements = []
+
+    model_distance = []
+    measurement_distance = []
+
+    offset = 0
+
+    for num, time in enumerate(car.times):
+        state, p = car_data[num]
+        x1, x2, v1, v2 = state
+        car_x1.append(x1)
+        car_x2.append(x2)
+        car_v1.append(v1)
+        car_v2.append(v2)
+
+        true_x1 = car.x1[num]
+        true_x2 = car.x2[num]
+        true_v1 = car.v1[num]
+        true_v2 = car.v2[num]
+
+        distance = sqrt((true_x1-x1)**2+(true_x2-x2)**2)
+        model_distance.append(distance)
+
+        if time in car.measurements_times:
+            x1_measurement = car.x1_measurements[num-offset]
+            x1_measurements.append(x1_measurement)
+
+            x2_measurement = car.x2_measurements[num - offset]
+            x2_measurements.append(x2_measurement)
+
+            distance = sqrt((true_x1-x1_measurement)**2+(true_x2-x2_measurement)**2)
+            measurement_distance.append(distance)
+
+        else:
+            offset += 1
+
+    plt.title('RC Car')
+    plt.plot(car.x1, car.x2, label='True')
+    plt.plot(x1_measurements, x2_measurements,'.', label='Measuements')
+    plt.plot(car_x1, car_x2, label='Model')
+    plt.legend(loc='upper left')
+    plt.show()
+
+    plt.title('Distances')
+    plt.plot(car.measurements_times, measurement_distance, label='Measurements')
+    plt.plot(car.times, model_distance, label='Model')
+    plt.legend(loc='upper left')
+    plt.show()
