@@ -135,7 +135,7 @@ class RC_Car_KalmanFilter(object):
         self.time_step = time_step
         self.n = f.shape[1]
 
-    def predict(self, theta, alpha):
+    def predict(self, alpha, theta):
         self.x = np.dot(self.f, self.x) + rc_car_control_input_model(self.x, self.time_step, theta, alpha)
         self.p = np.dot(np.dot(self.f, self.p), self.f.T) + self.q
         return self.x
@@ -147,3 +147,6 @@ class RC_Car_KalmanFilter(object):
         self.x = self.x + np.dot(k,y)
         self.p = np.dot(np.identity(len(self.x)) - np.dot(k, self.h), self.p)
         return self.x
+
+
+
