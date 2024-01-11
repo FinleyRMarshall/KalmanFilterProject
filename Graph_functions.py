@@ -217,6 +217,8 @@ def graph_car_vs_model(car, car_data):
 
     model_distance = []
     measurement_distance = []
+    average_model_distance = [0]
+    average_measurement_distance = [0]
 
     offset = 0
 
@@ -235,6 +237,8 @@ def graph_car_vs_model(car, car_data):
 
         distance = sqrt((true_x1-x1)**2+(true_x2-x2)**2)
         model_distance.append(distance)
+        a = average_model_distance[-1]
+        average_model_distance.append(average(distance,num,a))
 
         if time in car.measurements_times:
             x1_measurement = car.x1_measurements[num-offset]
@@ -245,13 +249,17 @@ def graph_car_vs_model(car, car_data):
 
             distance = sqrt((true_x1-x1_measurement)**2+(true_x2-x2_measurement)**2)
             measurement_distance.append(distance)
+            a = average_measurement_distance[-1]
+            average_measurement_distance.append(average(distance, num, a))
 
         else:
             offset += 1
 
+    print(a)
+
     plt.title('RC Car')
     plt.plot(car.x1, car.x2, label='True')
-    plt.plot(x1_measurements, x2_measurements,'.', label='Measuements')
+    #plt.plot(x1_measurements, x2_measurements,'.', label='Measuements')
     plt.plot(car_x1, car_x2, label='Model')
     plt.legend(loc='upper left')
     plt.show()
@@ -259,5 +267,11 @@ def graph_car_vs_model(car, car_data):
     plt.title('Distances')
     plt.plot(car.measurements_times, measurement_distance, label='Measurements')
     plt.plot(car.times, model_distance, label='Model')
+    plt.legend(loc='upper left')
+    plt.show()
+
+    plt.title('Average Distance')
+    plt.plot(car.measurements_times, average_measurement_distance[1:], label='Measurements')
+    plt.plot(car.times, average_model_distance[1:], label='Model')
     plt.legend(loc='upper left')
     plt.show()
