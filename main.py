@@ -107,6 +107,8 @@ def three_standard_deviations(p):
 def always_true(i):
     return True
 
+def always_false(i):
+    return False
 
 def loop_size(h, a, revolution):
     return int((360 // h * revolution) / (a * 360 / (2 * pi)))

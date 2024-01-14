@@ -206,7 +206,7 @@ def graph_average_error(satellite, prediction_data, estimate_data):
     plt.show()
 
 
-def graph_car_vs_model(car, car_data):
+def graph_car_vs_model(car, car_data, output='123'):
     car_x1 = []
     car_x2 = []
     car_v1 = []
@@ -255,23 +255,32 @@ def graph_car_vs_model(car, car_data):
         else:
             offset += 1
 
-    print(a)
+    if '1' in output:
+        plt.title('RC Car')
+        plt.plot(car.x1, car.x2, label='True')
+        #plt.plot(x1_measurements, x2_measurements,'.', label='Measuements')
+        plt.plot(car_x1, car_x2, label='Model')
+        plt.legend(loc='upper left')
+        plt.show()
 
-    plt.title('RC Car')
-    plt.plot(car.x1, car.x2, label='True')
-    #plt.plot(x1_measurements, x2_measurements,'.', label='Measuements')
-    plt.plot(car_x1, car_x2, label='Model')
-    plt.legend(loc='upper left')
-    plt.show()
+    if '2' in output:
+        plt.title('Distances')
+        plt.plot(car.measurements_times, measurement_distance, label='Measurements')
+        plt.plot(car.times, model_distance, label='Model')
+        plt.legend(loc='upper left')
+        plt.show()
 
-    plt.title('Distances')
-    plt.plot(car.measurements_times, measurement_distance, label='Measurements')
-    plt.plot(car.times, model_distance, label='Model')
-    plt.legend(loc='upper left')
-    plt.show()
+    if '3' in output:
+        plt.title('Average Distance')
+        plt.plot(car.measurements_times, average_measurement_distance[1:], label='Measurements')
+        plt.plot(car.times, average_model_distance[1:], label='Model')
+        plt.legend(loc='upper left')
+        plt.show()
 
-    plt.title('Average Distance')
-    plt.plot(car.measurements_times, average_measurement_distance[1:], label='Measurements')
-    plt.plot(car.times, average_model_distance[1:], label='Model')
-    plt.legend(loc='upper left')
-    plt.show()
+    if '4' in output:
+        plt.title('RC Car')
+        plt.plot(car.x1, car.x2, label='True')
+        plt.plot(car_x1, car_x2, label='Model')
+        plt.plot(x1_measurements, x2_measurements,'.', label='Measuements')
+        plt.legend(loc='upper left')
+        plt.show()
