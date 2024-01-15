@@ -1,13 +1,14 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from helper_functions import *
-from main import *
 
 
 def average(x, n, a):
     # Computes an average from last average a and n indexed at 0 for next item x
     return (n * a + x) / (n + 1)
 
+def three_standard_deviations(p):
+    return sqrt(p) * 3
 
 def graph_x1(satellite, prediction_data, estimate_data):
     # Graphs the x1 true values, measurements and the estimate
