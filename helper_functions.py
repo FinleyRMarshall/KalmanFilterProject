@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from math import sin, cos, radians, pi, sqrt
 from Graph_functions import *
 
+
 class Satellite:
     def __init__(self, a=1, h=1, q=0, r=0, radius=10, start_angle=None):
         self.a = a
@@ -19,8 +20,8 @@ class Satellite:
         self.measurements = []
 
     def __random_start__(self):
-        #returns a random start cords for both x1 and x2
-        #if the start angle is not given
+        # returns a random start cords for both x1 and x2
+        # if the start angle is not given
         if self.start_angle is None:
             self.start_angle = np.random.uniform(2 * pi)
 
@@ -43,7 +44,8 @@ class Satellite:
             self.current_time += self.h
             return x1_measurement
 
-        trans_matrix = np.array([[cos(self.a * self.h), -sin(self.a * self.h)], [sin(self.a * self.h), cos(self.a * self.h)]])
+        trans_matrix = np.array(
+            [[cos(self.a * self.h), -sin(self.a * self.h)], [sin(self.a * self.h), cos(self.a * self.h)]])
         last_cords = np.array([self.x1[-1], self.x2[-1]])
 
         cords = np.dot(trans_matrix, last_cords)
@@ -66,7 +68,7 @@ class Satellite:
         return x1_measurement if receive else None
 
     def graph(self, show=True):
-        #graphs x1, x2 true cords and the measurement of x1
+        # graphs x1, x2 true cords and the measurement of x1
         plt.title('Dimensions X1, X2 and X2 measurements of the satellite over time')
         plt.plot(self.measurements_times, self.measurements, '.', label='Measurements')
         plt.plot(self.times, self.x1, label='x1')
@@ -74,6 +76,7 @@ class Satellite:
         if show:
             plt.legend(loc='upper left')
             plt.show()
+
 
 class KalmanFilter(object):
     def __init__(self, f, h, q, r, p, x, b=0, u=0):
@@ -96,7 +99,7 @@ class KalmanFilter(object):
         y = z - np.dot(self.h, self.x)
         s = np.dot(np.dot(self.h, self.p), self.h.T) + self.r
         k = np.dot(np.dot(self.p, self.h.T), np.linalg.inv(s))
-        self.x = self.x + np.dot(k,y)
+        self.x = self.x + np.dot(k, y)
         self.p = np.dot(np.identity(len(self.x)) - np.dot(k, self.h), self.p)
         return self.x
 
@@ -104,11 +107,14 @@ class KalmanFilter(object):
 def always_true(i):
     return True
 
+
 def always_false(i):
     return False
 
+
 def loop_size(h, a, revolution):
     return int((360 // h * revolution) / (a * 360 / (2 * pi)))
+
 
 def satellite_analysis(satellites, revolutions, parameter, values, receive_values=None):
     # Runs the satellite analysis, quite similar to satellite_example
@@ -183,17 +189,19 @@ def satellite_analysis(satellites, revolutions, parameter, values, receive_value
 
     graph_analysis(data, parameter)
 
-def rc_car_control_input_model(x,  h, theta, alpha):
+
+def rc_car_control_input_model(x, h, theta, alpha):
     # Controls for the rc car
     # The explanation for this function can be found in the control input model section
     x_1, x_2, v_1, v_2 = x
-    mag_v = sqrt(v_1**2 + v_2**2)
-    scalar_factor = 1 + (alpha * h)/(mag_v)
-    new_x_1 = h/2*(-v_1 + scalar_factor*(v_1*cos(theta) - v_2*sin(theta)))
-    new_x_2 = h/2*(-v_2 + scalar_factor*(v_1*sin(theta) + v_2*cos(theta)))
-    new_v_1 = scalar_factor*(v_1*cos(theta) - v_2*sin(theta)) - v_1
-    new_v_2 = scalar_factor*(v_1*sin(theta) + v_2*cos(theta)) - v_2
+    mag_v = sqrt(v_1 ** 2 + v_2 ** 2)
+    scalar_factor = 1 + (alpha * h) / (mag_v)
+    new_x_1 = h * (-v_1 + scalar_factor * (v_1 * cos(theta) - v_2 * sin(theta))) / 2
+    new_x_2 = h * (-v_2 + scalar_factor * (v_1 * sin(theta) + v_2 * cos(theta))) / 2
+    new_v_1 = scalar_factor * (v_1 * cos(theta) - v_2 * sin(theta)) - v_1
+    new_v_2 = scalar_factor * (v_1 * sin(theta) + v_2 * cos(theta)) - v_2
     return np.array([new_x_1, new_x_2, new_v_1, new_v_2])
+
 
 class RC_Car_EKF(object):
     def __init__(self, f, h, q, r, p, x, time_step):
@@ -215,9 +223,6 @@ class RC_Car_EKF(object):
         y = z - np.dot(self.h, self.x)
         s = np.dot(np.dot(self.h, self.p), self.h.T) + self.r
         k = np.dot(np.dot(self.p, self.h.T), np.linalg.inv(s))
-        self.x = self.x + np.dot(k,y)
+        self.x = self.x + np.dot(k, y)
         self.p = np.dot(np.identity(len(self.x)) - np.dot(k, self.h), self.p)
         return self.x
-
-
-

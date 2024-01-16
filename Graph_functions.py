@@ -62,8 +62,8 @@ def graph_x1_and_p(satellite, prediction_data, estimate_data):
     plt.title('True Values vs Estimate Values of X1')
     plt.plot(satellite.times, satellite.x1, label='True X1')
     plt.plot(satellite.times, estimate_x1, label='Estimate of X1')
-    plt.plot(satellite.times, p_above, label='Upper Bound')
-    plt.plot(satellite.times, p_below, label='Lower Bound')
+    plt.plot(satellite.times, p_above, label='CI Upper Bound')
+    plt.plot(satellite.times, p_below, label='CI Lower Bound')
 
     plt.legend(loc='upper left')
     plt.show()
@@ -120,8 +120,8 @@ def graph_x2_and_p(satellite, prediction_data, estimate_data):
     plt.title('True Values vs Estimate Values of X2')
     plt.plot(satellite.times, satellite.x2, label='X2')
     plt.plot(satellite.times, estimate_x2, label='Estimate of X2')
-    plt.plot(satellite.times, p_above, label='Upper Bound')
-    plt.plot(satellite.times, p_below, label='Lower Bound')
+    plt.plot(satellite.times, p_above, label='CI Upper Bound')
+    plt.plot(satellite.times, p_below, label='CI Lower Bound')
 
     plt.legend(loc='upper left')
     plt.show()
@@ -226,6 +226,10 @@ def graph_car(car, car_data, output='123456789'):
     x1_p_below = []
     x2_p_above = []
     x2_p_below = []
+    v1_p_above = []
+    v1_p_below = []
+    v2_p_above = []
+    v2_p_below = []
 
     offset = 0
 
@@ -249,11 +253,18 @@ def graph_car(car, car_data, output='123456789'):
 
         x1_p = p[0][0]
         x2_p = p[1][1]
+        v1_p = p[2][2]
+        v2_p = p[3][3]
 
         x1_p_above.append(x1 + three_standard_deviations(x1_p))
         x1_p_below.append(x1 - three_standard_deviations(x1_p))
         x2_p_above.append(x2 + three_standard_deviations(x2_p))
         x2_p_below.append(x2 - three_standard_deviations(x2_p))
+
+        v1_p_above.append(v1 + three_standard_deviations(v1_p))
+        v1_p_below.append(v1 - three_standard_deviations(v1_p))
+        v2_p_above.append(v2 + three_standard_deviations(v2_p))
+        v2_p_below.append(v2 - three_standard_deviations(v2_p))
 
 
         if time in car.measurements_times:
@@ -281,9 +292,10 @@ def graph_car(car, car_data, output='123456789'):
 
     if '2' in output:
         plt.title('Distances')
-        plt.plot(car.measurements_times, measurement_distance, label='Measurements')
-        plt.plot(car.times, model_distance, label='Estimate')
-        plt.legend(loc='upper left')
+        #plt.plot(car.measurements_times, measurement_distance, label='Measurements')
+        #plt.plot(car.times, model_distance, label='Estimate')
+        plt.boxplot([measurement_distance, model_distance],labels = ['Measurements', 'Estimate'])
+        #plt.legend(loc='upper left')
         plt.show()
 
     if '3' in output:
@@ -294,7 +306,7 @@ def graph_car(car, car_data, output='123456789'):
         plt.show()
 
     if '4' in output:
-        plt.title('RC Car')
+        plt.title('True and Estimate of the RC Cars position ')
         plt.plot(car.x1, car.x2, label='True')
         plt.plot(car_x1, car_x2, label='Estimate')
         plt.plot(x1_measurements, x2_measurements,'.', label='Measuements')
@@ -302,47 +314,51 @@ def graph_car(car, car_data, output='123456789'):
         plt.show()
 
     if '5' in output:
-        plt.title('Estimate and Variance of Estimate for X1')
+        plt.title('Variance of Estimate for X1')
         plt.plot(car.times, car.x1, label='True')
         plt.plot(car.times, car_x1, label='Estimate')
-        plt.plot(car.times, x1_p_above, label='Upper Bound')
-        plt.plot(car.times, x1_p_below, label='Lower Bound')
+        plt.plot(car.times, x1_p_above, label='CI Upper Bound')
+        plt.plot(car.times, x1_p_below, label='CI Lower Bound')
         plt.legend(loc='upper left')
         plt.show()
 
     if '6' in output:
-        plt.title('Estimate and Variance of Estimate for X2')
+        plt.title('Variance of Estimate for X2')
         plt.plot(car.times, car.x2, label='True')
         plt.plot(car.times, car_x2, label='Estimate')
-        plt.plot(car.times, x2_p_above, label='Upper Bound')
-        plt.plot(car.times, x2_p_below, label='Lower Bound')
+        plt.plot(car.times, x2_p_above, label='CI Upper Bound')
+        plt.plot(car.times, x2_p_below, label='CI Lower Bound')
         plt.legend(loc='upper left')
         plt.show()
 
     if '7' in output:
-        plt.title('True value and Measurements of X1')
+        plt.title('True and Measurements of X1')
         plt.plot(car.times, car.x1, label='True')
         plt.plot(car.measurements_times, x1_measurements,'.', label='Measurements')
         plt.legend(loc='upper left')
         plt.show()
 
     if '8' in output:
-        plt.title('True value and Measurements of X2')
+        plt.title('True and Measurements of X2')
         plt.plot(car.times, car.x2, label='True')
         plt.plot(car.measurements_times, x2_measurements,'.', label='Measurements')
         plt.legend(loc='upper left')
         plt.show()
 
     if 'a' in output:
-        plt.title('True value and Measurements of V1')
+        plt.title('True and Measurements of V1')
         plt.plot(car.times, car.v1, label='True')
         plt.plot(car.times, car_v1, label='Estimate')
+        #plt.plot(car.times, v1_p_above, label='CI Upper Bound')
+        #plt.plot(car.times, v1_p_below, label='CI Lower Bound')
         plt.legend(loc='upper left')
         plt.show()
 
     if 'b' in output:
-        plt.title('True value and Measurements of V2')
+        plt.title('True and Measurements of V2')
         plt.plot(car.times, car.v2, label='True')
         plt.plot(car.times, car_v2, label='Estimate')
+        #plt.plot(car.times, v2_p_above, label='CI Upper Bound')
+        #plt.plot(car.times, v2_p_below, label='CI Lower Bound')
         plt.legend(loc='upper left')
         plt.show()
