@@ -282,8 +282,14 @@ def graph_car(car, car_data, output='123456789'):
         else:
             offset += 1
 
+    if '0' in output:
+        # Return measurement and estimate distance data
+        # Used for analysis of position estimates
+        return measurement_distance, model_distance
+
+
     if '1' in output:
-        plt.title('RC Car')
+        plt.title('Path of the RC Car')
         plt.plot(car.x1, car.x2, label='True')
         #plt.plot(x1_measurements, x2_measurements,'.', label='Measuements')
         plt.plot(car_x1, car_x2, label='Estimate')
@@ -291,16 +297,16 @@ def graph_car(car, car_data, output='123456789'):
         plt.show()
 
     if '2' in output:
-        plt.title('Distances')
+        plt.title('Distances of GPS Measurements and Estimates')
         #plt.plot(car.measurements_times, measurement_distance, label='Measurements')
         #plt.plot(car.times, model_distance, label='Estimate')
-        plt.boxplot([measurement_distance, model_distance],labels = ['Measurements', 'Estimate'])
+        plt.boxplot([measurement_distance, model_distance],labels = ['GPS Measurements', 'Estimate'])
         #plt.legend(loc='upper left')
         plt.show()
 
     if '3' in output:
         plt.title('Average Distance')
-        plt.plot(car.measurements_times, average_measurement_distance[1:], label='Measurements')
+        plt.plot(car.measurements_times, average_measurement_distance[1:], label='GPS Measurements')
         plt.plot(car.times, average_model_distance[1:], label='Estimate')
         plt.legend(loc='upper left')
         plt.show()
@@ -309,7 +315,7 @@ def graph_car(car, car_data, output='123456789'):
         plt.title('True and Estimate of the RC Cars position ')
         plt.plot(car.x1, car.x2, label='True')
         plt.plot(car_x1, car_x2, label='Estimate')
-        plt.plot(x1_measurements, x2_measurements,'.', label='Measuements')
+        plt.plot(x1_measurements, x2_measurements,'.', label='GPS Measuements')
         plt.legend(loc='upper left')
         plt.show()
 
@@ -334,19 +340,19 @@ def graph_car(car, car_data, output='123456789'):
     if '7' in output:
         plt.title('True and Measurements of X1')
         plt.plot(car.times, car.x1, label='True')
-        plt.plot(car.measurements_times, x1_measurements,'.', label='Measurements')
+        plt.plot(car.measurements_times, x1_measurements,'.', label='GPS Measurements')
         plt.legend(loc='upper left')
         plt.show()
 
     if '8' in output:
         plt.title('True and Measurements of X2')
         plt.plot(car.times, car.x2, label='True')
-        plt.plot(car.measurements_times, x2_measurements,'.', label='Measurements')
+        plt.plot(car.measurements_times, x2_measurements,'.', label='GPS Measurements')
         plt.legend(loc='upper left')
         plt.show()
 
     if 'a' in output:
-        plt.title('True and Measurements of V1')
+        plt.title('True and Estimates of V1')
         plt.plot(car.times, car.v1, label='True')
         plt.plot(car.times, car_v1, label='Estimate')
         #plt.plot(car.times, v1_p_above, label='CI Upper Bound')
@@ -355,10 +361,11 @@ def graph_car(car, car_data, output='123456789'):
         plt.show()
 
     if 'b' in output:
-        plt.title('True and Measurements of V2')
+        plt.title('True and Estimates of V2')
         plt.plot(car.times, car.v2, label='True')
         plt.plot(car.times, car_v2, label='Estimate')
         #plt.plot(car.times, v2_p_above, label='CI Upper Bound')
         #plt.plot(car.times, v2_p_below, label='CI Lower Bound')
         plt.legend(loc='upper left')
         plt.show()
+
