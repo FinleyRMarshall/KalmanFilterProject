@@ -320,19 +320,19 @@ def graph_car(car, car_data, output='123456789'):
 
     if '5' in output:
         plt.title('Variance of Estimate for X1')
-        plt.plot(car.times, car.x1, label='True')
         plt.plot(car.times, car_x1, label='Estimate')
         plt.plot(car.times, x1_p_above, label='CI Upper Bound')
         plt.plot(car.times, x1_p_below, label='CI Lower Bound')
+        plt.plot(car.times, car.x1, label='True')
         plt.legend(loc='upper left')
         plt.show()
 
     if '6' in output:
         plt.title('Variance of Estimate for X2')
-        plt.plot(car.times, car.x2, label='True')
         plt.plot(car.times, car_x2, label='Estimate')
         plt.plot(car.times, x2_p_above, label='CI Upper Bound')
         plt.plot(car.times, x2_p_below, label='CI Lower Bound')
+        plt.plot(car.times, car.x2, label='True')
         plt.legend(loc='upper left')
         plt.show()
 
