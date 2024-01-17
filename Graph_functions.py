@@ -221,6 +221,8 @@ def graph_car(car, car_data, output='123456789'):
     measurement_distance = []
     average_model_distance = [0]
     average_measurement_distance = [0]
+    model_v1_distance = []
+    model_v2_distance = []
 
     x1_p_above = []
     x1_p_below = []
@@ -250,6 +252,9 @@ def graph_car(car, car_data, output='123456789'):
         model_distance.append(distance)
         a = average_model_distance[-1]
         average_model_distance.append(average(distance,num,a))
+
+        model_v1_distance.append(abs(true_v1 - v1))
+        model_v2_distance.append(abs(true_v2 - v2))
 
         x1_p = p[0][0]
         x2_p = p[1][1]
@@ -287,35 +292,29 @@ def graph_car(car, car_data, output='123456789'):
         # Used for analysis of position estimates
         return measurement_distance, model_distance
 
-
     if '1' in output:
+
+        return model_v1_distance, model_v2_distance
+
+    if '2' in output:
         plt.title('Path of the RC Car')
         plt.plot(car.x1, car.x2, label='True')
-        #plt.plot(x1_measurements, x2_measurements,'.', label='Measuements')
+        #plt.plot(x1_measurements, x2_measurements,'.', label='GPS Measuements')
         plt.plot(car_x1, car_x2, label='Estimate')
         plt.legend(loc='upper left')
         plt.show()
 
-    if '2' in output:
-        plt.title('Distances of GPS Measurements and Estimates')
-        #plt.plot(car.measurements_times, measurement_distance, label='Measurements')
-        #plt.plot(car.times, model_distance, label='Estimate')
-        plt.boxplot([measurement_distance, model_distance],labels = ['GPS Measurements', 'Estimate'])
-        #plt.legend(loc='upper left')
-        plt.show()
-
     if '3' in output:
-        plt.title('Average Distance')
-        plt.plot(car.measurements_times, average_measurement_distance[1:], label='GPS Measurements')
-        plt.plot(car.times, average_model_distance[1:], label='Estimate')
+        plt.title('Distances of GPS Measurements and Estimates')
+        plt.plot(car.measurements_times, measurement_distance, label='Measurements')
+        plt.plot(car.times, model_distance, label='Estimate')
         plt.legend(loc='upper left')
         plt.show()
 
     if '4' in output:
-        plt.title('True and Estimate of the RC Cars position ')
-        plt.plot(car.x1, car.x2, label='True')
-        plt.plot(car_x1, car_x2, label='Estimate')
-        plt.plot(x1_measurements, x2_measurements,'.', label='GPS Measuements')
+        plt.title('Average Distance')
+        plt.plot(car.measurements_times, average_measurement_distance[1:], label='GPS Measurements')
+        plt.plot(car.times, average_model_distance[1:], label='Estimate')
         plt.legend(loc='upper left')
         plt.show()
 
@@ -353,19 +352,23 @@ def graph_car(car, car_data, output='123456789'):
 
     if 'a' in output:
         plt.title('True and Estimates of V1')
-        plt.plot(car.times, car.v1, label='True')
         plt.plot(car.times, car_v1, label='Estimate')
-        #plt.plot(car.times, v1_p_above, label='CI Upper Bound')
-        #plt.plot(car.times, v1_p_below, label='CI Lower Bound')
+        plt.plot(car.times, v1_p_above, label='CI Upper Bound')
+        plt.plot(car.times, v1_p_below, label='CI Lower Bound')
+        plt.plot(car.times, car.v1, label='True')
+
         plt.legend(loc='upper left')
         plt.show()
 
     if 'b' in output:
         plt.title('True and Estimates of V2')
-        plt.plot(car.times, car.v2, label='True')
         plt.plot(car.times, car_v2, label='Estimate')
-        #plt.plot(car.times, v2_p_above, label='CI Upper Bound')
-        #plt.plot(car.times, v2_p_below, label='CI Lower Bound')
+        plt.plot(car.times, v2_p_above, label='CI Upper Bound')
+        plt.plot(car.times, v2_p_below, label='CI Lower Bound')
+        plt.plot(car.times, car.v2, label='True')
         plt.legend(loc='upper left')
         plt.show()
 
+    if '1' in output:
+        plt.title('Different of V1 and V2 estimates from True values')
+        plt.boxplot([model_v1_distance, model_v2_distance], showfliers=False, labels = ['V1 Estimates', 'V2 Estimates'])
