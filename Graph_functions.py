@@ -32,6 +32,8 @@ def graph_x1(satellite, prediction_data, estimate_data):
     plt.plot(satellite.measurements_times, estimate_x1, label='Estimate_x1')
     #plt.plot(satellite.times, predictions_x1, '+', label='Predictions_x1')
     plt.legend(loc='upper left')
+    plt.xlabel('Time')
+    plt.ylabel('X1')
     plt.show()
 
 
@@ -61,10 +63,11 @@ def graph_x1_and_p(satellite, prediction_data, estimate_data):
 
     plt.title('True Values vs Estimate Values of X1')
     plt.plot(satellite.times, satellite.x1, label='True X1')
-    plt.plot(satellite.times, estimate_x1, label='Estimate of X1')
+    plt.plot(satellite.times, estimate_x1, label='X1 Estimates')
     plt.plot(satellite.times, p_above, label='CI Upper Bound')
     plt.plot(satellite.times, p_below, label='CI Lower Bound')
-
+    plt.xlabel('Time')
+    plt.ylabel('X1')
     plt.legend(loc='upper left')
     plt.show()
 
@@ -88,6 +91,8 @@ def graph_x2(satellite, prediction_data, estimate_data):
     plt.plot(satellite.measurements_times, estimate_x2, label='Estimate_x2')
     #plt.plot(satellite.times, predictions_x2, '+', label='Predictions_x2')
     plt.legend(loc='upper left')
+    plt.xlabel('Time')
+    plt.ylabel('X2')
     plt.show()
 
 
@@ -118,11 +123,12 @@ def graph_x2_and_p(satellite, prediction_data, estimate_data):
         p_below.append(x2_estimate - three_standard_deviations(p))
 
     plt.title('True Values vs Estimate Values of X2')
-    plt.plot(satellite.times, satellite.x2, label='X2')
-    plt.plot(satellite.times, estimate_x2, label='Estimate of X2')
+    plt.plot(satellite.times, satellite.x2, label='True X2')
+    plt.plot(satellite.times, estimate_x2, label='X2 Estimates')
     plt.plot(satellite.times, p_above, label='CI Upper Bound')
     plt.plot(satellite.times, p_below, label='CI Lower Bound')
-
+    plt.xlabel('Time')
+    plt.ylabel('X2')
     plt.legend(loc='upper left')
     plt.show()
 
@@ -138,6 +144,8 @@ def graph_analysis(data, parameter):
         plt.plot( times, x1s, symbols[num % 3] + 'g', label = 'X1 for {} = {}'.format(parameter, value))
         plt.plot( times, x2s, symbols[num % 3] + 'r', label = 'X2 for {} = {}'.format(parameter, value))
 
+    plt.xlabel('Time')
+    plt.ylabel('Distance')
     plt.legend(loc='upper left')
     plt.show()
 
@@ -164,11 +172,12 @@ def graph_error(satellite, prediction_data, estimate_data):
         x1_error.append(true_x1 - x1_estimate)
         x2_error.append(true_x2 - x2_estimate)
 
-    plt.title('Error of Measurements and X1, X2')
+    plt.title('Error of Measurements and X1, X2 Estimates')
     plt.plot(satellite.measurements_times, measurement_error, label='Measurement')
-    plt.plot(satellite.times, x1_error, label='X1')
-    plt.plot(satellite.times, x2_error, label='X2')
-
+    plt.plot(satellite.times, x1_error, label='X1 Estimates')
+    plt.plot(satellite.times, x2_error, label='X2 Estimates')
+    plt.xlabel('Time')
+    plt.ylabel('Distance')
     plt.legend(loc='upper left')
     plt.show()
 
@@ -205,10 +214,29 @@ def graph_average_error(satellite, prediction_data, estimate_data):
     plt.plot(satellite.times, average_x1_estimate_error[1:], label='X1')
     plt.plot(satellite.times, average_x2_estimate_error[1:], label='X2')
     plt.legend(loc='upper left')
+    plt.xlabel('Time')
+    plt.ylabel('Average Distance')
     plt.show()
 
 
-def graph_car(car, car_data, output='123456789'):
+def graph_car(car, car_data, output):
+    """
+    Process the car data, returns or graphs data as required
+
+    Output key
+    0: Return position and measurement distance data
+    1: Return velocity distance data
+    2: Graph path of car and estimate of car
+    3: Graph distance at each time step of position estimates and measurements
+    4: Graph average distance at each time step of position estimates and measurements
+    5: Graph x1 estimate, x1 true and 99% confidence interval of estimate
+    6: Graph x2 estimate, x1 true and 99% confidence interval of estimate
+    7: Graph x1 true and x1 measurement
+    8: Graph x2 true and x2 measurement
+    a: Graph v1 estimate, v1 true and 99% confidence interval of estimate
+    b: Graph v2 estimate, v2 true and 99% confidence interval of estimate
+    """
+
     car_x1 = []
     car_x2 = []
     car_v1 = []
@@ -235,6 +263,7 @@ def graph_car(car, car_data, output='123456789'):
 
     offset = 0
 
+    ### Process all the data needed for all the graphs
     for num, time in enumerate(car.times):
         state, p = car_data[num]
         x1, x2, v1, v2 = state
@@ -293,82 +322,114 @@ def graph_car(car, car_data, output='123456789'):
         return measurement_distance, model_distance
 
     if '1' in output:
-
+        # return the v1 estimate, and v2 estimate distance data
+        # Used for analysis of the velocity estimates
         return model_v1_distance, model_v2_distance
 
+
     if '2' in output:
+        # Graph path of car and estimate of car
         plt.title('Path of the RC Car')
         plt.plot(car.x1, car.x2, label='True')
         #plt.plot(x1_measurements, x2_measurements,'.', label='GPS Measuements')
         plt.plot(car_x1, car_x2, label='Estimate')
         plt.legend(loc='upper left')
+        plt.xlabel('X1')
+        plt.ylabel('X2')
         plt.show()
 
     if '3' in output:
+        # Graph distance at each time step of position estimates and measurements
         plt.title('Distances of GPS Measurements and Estimates')
-        plt.plot(car.measurements_times, measurement_distance, label='Measurements')
+        plt.plot(car.measurements_times, measurement_distance, label='GPS Measurements')
         plt.plot(car.times, model_distance, label='Estimate')
         plt.legend(loc='upper left')
+        plt.xlabel('Time')
+        plt.ylabel('Distance')
         plt.show()
 
     if '4' in output:
-        plt.title('Average Distance')
+        # Graph average distance at each time step of position estimates and measurements
+        plt.title('Average Distance of GPS Measurements and Estimates')
         plt.plot(car.measurements_times, average_measurement_distance[1:], label='GPS Measurements')
-        plt.plot(car.times, average_model_distance[1:], label='Estimate')
+        plt.plot(car.times, average_model_distance[1:], label='Estimates')
         plt.legend(loc='upper left')
+        plt.xlabel('Time')
+        plt.ylabel('Average Distance')
         plt.show()
 
     if '5' in output:
+        # Graph x1 estimate, x1 true and 99% confidence interval of estimate
         plt.title('Variance of Estimate for X1')
-        plt.plot(car.times, car_x1, label='Estimate')
+        plt.plot(car.times, car_x1, label='Estimates')
         plt.plot(car.times, x1_p_above, label='CI Upper Bound')
         plt.plot(car.times, x1_p_below, label='CI Lower Bound')
-        plt.plot(car.times, car.x1, label='True')
+        plt.plot(car.times, car.x1, label='True X1')
         plt.legend(loc='upper left')
+        plt.xlabel('Time')
+        plt.ylabel('X1')
         plt.show()
 
     if '6' in output:
+        # Graph x2 estimate, x1 true and 99% confidence interval of estimate
         plt.title('Variance of Estimate for X2')
-        plt.plot(car.times, car_x2, label='Estimate')
+        plt.plot(car.times, car_x2, label='Estimates')
         plt.plot(car.times, x2_p_above, label='CI Upper Bound')
         plt.plot(car.times, x2_p_below, label='CI Lower Bound')
-        plt.plot(car.times, car.x2, label='True')
+        plt.plot(car.times, car.x2, label='True X2')
         plt.legend(loc='upper left')
+        plt.xlabel('Time')
+        plt.ylabel('X2')
         plt.show()
 
     if '7' in output:
+        # Graph x1 true and x1 measurement
         plt.title('True and Measurements of X1')
-        plt.plot(car.times, car.x1, label='True')
+        plt.plot(car.times, car.x1, label='True X1')
         plt.plot(car.measurements_times, x1_measurements,'.', label='GPS Measurements')
         plt.legend(loc='upper left')
+        plt.xlabel('Time')
+        plt.ylabel('X1')
         plt.show()
 
     if '8' in output:
+        # Graph x2 true and x2 measurement
         plt.title('True and Measurements of X2')
-        plt.plot(car.times, car.x2, label='True')
+        plt.plot(car.times, car.x2, label='True X2')
         plt.plot(car.measurements_times, x2_measurements,'.', label='GPS Measurements')
         plt.legend(loc='upper left')
+        plt.xlabel('Time')
+        plt.ylabel('X2')
         plt.show()
 
     if 'a' in output:
-        plt.title('True and Estimates of V1')
-        plt.plot(car.times, car_v1, label='Estimate')
+        # Graph v1 estimate, v1 true and 99% confidence interval of estimate
+        plt.title('Variance of Estimate for V1')
+        plt.plot(car.times, car_v1, label='Estimates')
         plt.plot(car.times, v1_p_above, label='CI Upper Bound')
         plt.plot(car.times, v1_p_below, label='CI Lower Bound')
-        plt.plot(car.times, car.v1, label='True')
-
+        plt.plot(car.times, car.v1, label='True V1')
+        plt.xlabel('Time')
+        plt.ylabel('V1')
         plt.legend(loc='upper left')
         plt.show()
 
     if 'b' in output:
-        plt.title('True and Estimates of V2')
-        plt.plot(car.times, car_v2, label='Estimate')
+        #  Graph v2 estimate, v2 true and 99% confidence interval of estimate
+        plt.title('Variance of Estimate for V2')
+        plt.plot(car.times, car_v2, label='Estimates')
         plt.plot(car.times, v2_p_above, label='CI Upper Bound')
         plt.plot(car.times, v2_p_below, label='CI Lower Bound')
-        plt.plot(car.times, car.v2, label='True')
+        plt.plot(car.times, car.v2, label='True V2')
         plt.legend(loc='upper left')
+        plt.xlabel('Time')
+        plt.ylabel('V2')
         plt.show()
 
-    if '1' in output:
-        plt.title('Different of V1 and V2 estimates from True values')
-        plt.boxplot([model_v1_distance, model_v2_distance], showfliers=False, labels = ['V1 Estimates', 'V2 Estimates'])
+
+def graph_boxplot(data, data_names):
+    # Graphs box plots
+    plt.title('Distances for Position')
+    plt.boxplot(data, showfliers=False, labels=data_names)
+    plt.ylabel("Distance")
+    plt.show()

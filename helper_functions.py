@@ -5,7 +5,8 @@ from Graph_functions import *
 
 
 class Satellite:
-    def __init__(self, a=1, h=1, q=0, r=0, radius=10, start_angle=None):
+    def __init__(self, a=None, h=None, q=None, r=None, radius=None, start_angle=None):
+        # Creates the satellite, given all the required values as described before.
         self.a = a
         self.h = h
         self.radius = radius
@@ -17,11 +18,12 @@ class Satellite:
         self.measurements_times = []
         self.current_time = 0
         self.start_angle = start_angle
+        # The start angle is from the x1 positive axis, anti-clockwise
         self.measurements = []
 
     def __random_start__(self):
-        # returns a random start cords for both x1 and x2
-        # if the start angle is not given
+        # Returns a random start position for the satellite
+        # If the start angle is not given
         if self.start_angle is None:
             self.start_angle = np.random.uniform(2 * pi)
 
@@ -33,6 +35,7 @@ class Satellite:
         self.times.append(self.current_time)
 
         if len(self.x1) == 0:
+            # If the satellite has just been created.
             x1_cord, x2_cord = self.__random_start__()
             self.x1.append(x1_cord)
             self.x2.append(x2_cord)
@@ -42,21 +45,22 @@ class Satellite:
             self.measurements_times.append(self.current_time)
 
             self.current_time += self.h
+            # The model only sees the x1 measurement
             return x1_measurement
 
-        trans_matrix = np.array(
-            [[cos(self.a * self.h), -sin(self.a * self.h)], [sin(self.a * self.h), cos(self.a * self.h)]])
+        # Uses the transition matrix to find the next position of the satellite
+        # Noise is then added, to simulate the random movement
+        trans_matrix = np.array([[cos(self.a * self.h), -sin(self.a * self.h)],
+                                 [sin(self.a * self.h), cos(self.a * self.h)]])
         last_cords = np.array([self.x1[-1], self.x2[-1]])
-
-        cords = np.dot(trans_matrix, last_cords)
-        x1_cord, x2_cord = cords
+        x1_cord, x2_cord = np.dot(trans_matrix, last_cords)
         x1_noise, x2_noise = np.random.normal(0, self.q, 2)
         x1_cord += x1_noise
         x2_cord += x2_noise
-
         self.x1.append(x1_cord)
         self.x2.append(x2_cord)
 
+        # If the model is to receive a measurement, process the measurement
         if receive:
             x1_measurement = x1_cord + np.random.normal(0, self.r)
             self.measurements.append(x1_measurement)
@@ -65,14 +69,20 @@ class Satellite:
             x1_measurement = None
 
         self.current_time += self.h
+
+        # The model only sees the x1 measurement
         return x1_measurement if receive else None
 
-    def graph(self, show=True):
-        # graphs x1, x2 true cords and the measurement of x1
-        plt.title('Dimensions X1, X2 and X2 measurements of the satellite over time')
+    def graph(self, show=True, title=None):
+        # Graphs x1, x2 true cords and the measurements of x1
+        if title is None:
+            title = 'True Values of X1, X2 and Measurements of X1'
+        plt.title(title)
         plt.plot(self.measurements_times, self.measurements, '.', label='Measurements')
-        plt.plot(self.times, self.x1, label='x1')
-        plt.plot(self.times, self.x2, label='x2')
+        plt.plot(self.times, self.x1, label='X1')
+        plt.plot(self.times, self.x2, label='X2')
+        plt.xlabel("Time")
+        plt.ylabel("Distance")
         if show:
             plt.legend(loc='upper left')
             plt.show()
@@ -99,7 +109,7 @@ class KalmanFilter(object):
         y = z - np.dot(self.h, self.x)
         s = np.dot(np.dot(self.h, self.p), self.h.T) + self.r
         k = np.dot(np.dot(self.p, self.h.T), np.linalg.inv(s))
-        self.x = self.x + np.dot(k, y)
+        self.x = self.x + np.dot(k,y)
         self.p = np.dot(np.identity(len(self.x)) - np.dot(k, self.h), self.p)
         return self.x
 
@@ -110,6 +120,10 @@ def always_true(i):
 
 def always_false(i):
     return False
+
+
+def every_second(i):
+    return i % 2 == 0
 
 
 def loop_size(h, a, revolution):
