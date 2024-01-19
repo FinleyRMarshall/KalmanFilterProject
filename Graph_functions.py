@@ -334,8 +334,8 @@ def graph_car(car, car_data, output):
         #plt.plot(x1_measurements, x2_measurements,'.', label='GPS Measuements')
         plt.plot(car_x1, car_x2, label='Estimate')
         plt.legend(loc='upper left')
-        plt.xlabel('X1')
-        plt.ylabel('X2')
+        plt.xlabel('X1, (cm)')
+        plt.ylabel('X2, (cm)')
         plt.show()
 
     if '3' in output:
@@ -344,8 +344,8 @@ def graph_car(car, car_data, output):
         plt.plot(car.measurements_times, measurement_distance, label='GPS Measurements')
         plt.plot(car.times, model_distance, label='Estimate')
         plt.legend(loc='upper left')
-        plt.xlabel('Time')
-        plt.ylabel('Distance')
+        plt.xlabel('Time, (s)')
+        plt.ylabel('Distance, (cm)')
         plt.show()
 
     if '4' in output:
@@ -354,8 +354,8 @@ def graph_car(car, car_data, output):
         plt.plot(car.measurements_times, average_measurement_distance[1:], label='GPS Measurements')
         plt.plot(car.times, average_model_distance[1:], label='Estimates')
         plt.legend(loc='upper left')
-        plt.xlabel('Time')
-        plt.ylabel('Average Distance')
+        plt.xlabel('Time, (s)')
+        plt.ylabel('Average Distance, (cm)')
         plt.show()
 
     if '5' in output:
@@ -366,8 +366,8 @@ def graph_car(car, car_data, output):
         plt.plot(car.times, x1_p_below, label='CI Lower Bound')
         plt.plot(car.times, car.x1, label='True X1')
         plt.legend(loc='upper left')
-        plt.xlabel('Time')
-        plt.ylabel('X1')
+        plt.xlabel('Time, (s)')
+        plt.ylabel('X1, (cm)')
         plt.show()
 
     if '6' in output:
@@ -378,8 +378,8 @@ def graph_car(car, car_data, output):
         plt.plot(car.times, x2_p_below, label='CI Lower Bound')
         plt.plot(car.times, car.x2, label='True X2')
         plt.legend(loc='upper left')
-        plt.xlabel('Time')
-        plt.ylabel('X2')
+        plt.xlabel('Time, (s)')
+        plt.ylabel('X2, (cm)')
         plt.show()
 
     if '7' in output:
@@ -388,8 +388,8 @@ def graph_car(car, car_data, output):
         plt.plot(car.times, car.x1, label='True X1')
         plt.plot(car.measurements_times, x1_measurements,'.', label='GPS Measurements')
         plt.legend(loc='upper left')
-        plt.xlabel('Time')
-        plt.ylabel('X1')
+        plt.xlabel('Time, (s)')
+        plt.ylabel('X1, (cm)')
         plt.show()
 
     if '8' in output:
@@ -398,8 +398,8 @@ def graph_car(car, car_data, output):
         plt.plot(car.times, car.x2, label='True X2')
         plt.plot(car.measurements_times, x2_measurements,'.', label='GPS Measurements')
         plt.legend(loc='upper left')
-        plt.xlabel('Time')
-        plt.ylabel('X2')
+        plt.xlabel('Time, (s)')
+        plt.ylabel('X2, (cm)')
         plt.show()
 
     if 'a' in output:
@@ -409,8 +409,8 @@ def graph_car(car, car_data, output):
         plt.plot(car.times, v1_p_above, label='CI Upper Bound')
         plt.plot(car.times, v1_p_below, label='CI Lower Bound')
         plt.plot(car.times, car.v1, label='True V1')
-        plt.xlabel('Time')
-        plt.ylabel('V1')
+        plt.xlabel('Time, (s)')
+        plt.ylabel('V1, (cm\s)')
         plt.legend(loc='upper left')
         plt.show()
 
@@ -422,8 +422,8 @@ def graph_car(car, car_data, output):
         plt.plot(car.times, v2_p_below, label='CI Lower Bound')
         plt.plot(car.times, car.v2, label='True V2')
         plt.legend(loc='upper left')
-        plt.xlabel('Time')
-        plt.ylabel('V2')
+        plt.xlabel('Time, (s)')
+        plt.ylabel('V2, (cm\s)')
         plt.show()
 
 
