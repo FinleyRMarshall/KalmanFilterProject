@@ -73,20 +73,6 @@ class Satellite:
         # The model only sees the x1 measurement
         return x1_measurement if receive else None
 
-    def graph(self, show=True, title=None):
-        # Graphs x1, x2 true cords and the measurements of x1
-        if title is None:
-            title = 'True Values of X1, X2 and Measurements of X1'
-        plt.title(title)
-        plt.plot(self.measurements_times, self.measurements, '.', label='Measurements')
-        plt.plot(self.times, self.x1, label='X1')
-        plt.plot(self.times, self.x2, label='X2')
-        plt.xlabel("Time")
-        plt.ylabel("Distance")
-        if show:
-            plt.legend(loc='upper left')
-            plt.show()
-
 
 class KalmanFilter(object):
     def __init__(self, f, h, q, r, p, x, b=0, u=0):
