@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
+from math import sqrt
 from helper_functions import *
 
 
@@ -37,7 +38,7 @@ def graph_x1(satellite, prediction_data, estimate_data):
     plt.show()
 
 
-def graph_x1_and_p(satellite, prediction_data, estimate_data):
+def graph_x1_and_p(satellite, prediction_data, estimate_data, figure_txt):
     # Graphs true x1, estimate, and confidence interval
     # Given the satellite object and data from the model
     estimate_x1 = []
@@ -68,6 +69,7 @@ def graph_x1_and_p(satellite, prediction_data, estimate_data):
     plt.plot(satellite.times, p_below, label='CI Lower Bound')
     plt.xlabel('Time')
     plt.ylabel('X1')
+    plt.figtext(0.5, -0.10, figure_txt, wrap=True, horizontalalignment='center', fontsize=12)
     plt.legend(loc='upper left')
     plt.show()
 
@@ -96,7 +98,7 @@ def graph_x2(satellite, prediction_data, estimate_data):
     plt.show()
 
 
-def graph_x2_and_p(satellite, prediction_data, estimate_data):
+def graph_x2_and_p(satellite, prediction_data, estimate_data, figure_txt):
     # Graphs true x2, estimate, and confidence interval
     # Given the satellite object and data from the model
     estimate_x2 = []
@@ -129,24 +131,28 @@ def graph_x2_and_p(satellite, prediction_data, estimate_data):
     plt.plot(satellite.times, p_below, label='CI Lower Bound')
     plt.xlabel('Time')
     plt.ylabel('X2')
+    plt.figtext(0.5, -0.10, figure_txt, wrap=True, horizontalalignment='center', fontsize=12)
     plt.legend(loc='upper left')
     plt.show()
 
 
-def graph_analysis(data, parameter):
+def graph_analysis(data, parameter, figure_txt, title):
     # Graphs the analysis data given from satellite_analysis in helper functions
-    plt.title("Analysis of {} different values for {}".format(len(data), parameter))
+    if title is None:
+        title = "Analysis of {} different values for {}".format(len(data), parameter)
+    plt.title(title)
     symbols = ['.', 'P', '^']
 
     for num, i in enumerate(data):
         measurements, x1s, x2s, times, measurements_times, value = i
-        plt.plot(measurements_times, measurements, symbols[num % 3] + 'b', label = 'Measurements for {} = {}'.format(parameter, value))
-        plt.plot( times, x1s, symbols[num % 3] + 'g', label = 'X1 for {} = {}'.format(parameter, value))
-        plt.plot( times, x2s, symbols[num % 3] + 'r', label = 'X2 for {} = {}'.format(parameter, value))
+        plt.plot(measurements_times, measurements, symbols[num % 3] + 'b', label = 'Measurements'.format(parameter, value))
+        plt.plot( times, x1s, symbols[num % 3] + 'g', label = 'X1 Estimates'.format(parameter, value))
+        plt.plot( times, x2s, symbols[num % 3] + 'r', label = 'X2 Estimates'.format(parameter, value))
 
     plt.xlabel('Time')
-    plt.ylabel('Distance')
-    plt.legend(loc='upper left')
+    plt.ylabel('Average Distance')
+    plt.figtext(0.5, -0.10, figure_txt, wrap=True, horizontalalignment='center', fontsize=12)
+    plt.legend(loc='upper right')
     plt.show()
 
 def graph_error(satellite, prediction_data, estimate_data):
@@ -219,7 +225,7 @@ def graph_average_error(satellite, prediction_data, estimate_data):
     plt.show()
 
 
-def graph_car(car, car_data, output):
+def graph_car(car, car_data, figure_txt, output):
     """
     Process the car data, returns or graphs data as required
 
@@ -233,6 +239,7 @@ def graph_car(car, car_data, output):
     6: Graph x2 estimate, x1 true and 99% confidence interval of estimate
     7: Graph x1 true and x1 measurement
     8: Graph x2 true and x2 measurement
+    9: # Graph path of car
     a: Graph v1 estimate, v1 true and 99% confidence interval of estimate
     b: Graph v2 estimate, v2 true and 99% confidence interval of estimate
     """
@@ -336,6 +343,7 @@ def graph_car(car, car_data, output):
         plt.legend(loc='upper left')
         plt.xlabel('X1, (cm)')
         plt.ylabel('X2, (cm)')
+        plt.figtext(0.5, -0.10, figure_txt, wrap=True, horizontalalignment='center', fontsize=12)
         plt.show()
 
     if '3' in output:
@@ -346,6 +354,7 @@ def graph_car(car, car_data, output):
         plt.legend(loc='upper left')
         plt.xlabel('Time, (s)')
         plt.ylabel('Distance, (cm)')
+        plt.figtext(0.5, -0.10, figure_txt, wrap=True, horizontalalignment='center', fontsize=12)
         plt.show()
 
     if '4' in output:
@@ -356,6 +365,7 @@ def graph_car(car, car_data, output):
         plt.legend(loc='upper left')
         plt.xlabel('Time, (s)')
         plt.ylabel('Average Distance, (cm)')
+        plt.figtext(0.5, -0.10, figure_txt, wrap=True, horizontalalignment='center', fontsize=12)
         plt.show()
 
     if '5' in output:
@@ -368,6 +378,7 @@ def graph_car(car, car_data, output):
         plt.legend(loc='upper left')
         plt.xlabel('Time, (s)')
         plt.ylabel('X1, (cm)')
+        plt.figtext(0.5, -0.10, figure_txt, wrap=True, horizontalalignment='center', fontsize=12)
         plt.show()
 
     if '6' in output:
@@ -380,6 +391,7 @@ def graph_car(car, car_data, output):
         plt.legend(loc='upper left')
         plt.xlabel('Time, (s)')
         plt.ylabel('X2, (cm)')
+        plt.figtext(0.5, -0.10, figure_txt, wrap=True, horizontalalignment='center', fontsize=12)
         plt.show()
 
     if '7' in output:
@@ -390,6 +402,7 @@ def graph_car(car, car_data, output):
         plt.legend(loc='upper left')
         plt.xlabel('Time, (s)')
         plt.ylabel('X1, (cm)')
+        plt.figtext(0.5, -0.10, figure_txt, wrap=True, horizontalalignment='center', fontsize=12)
         plt.show()
 
     if '8' in output:
@@ -400,6 +413,17 @@ def graph_car(car, car_data, output):
         plt.legend(loc='upper left')
         plt.xlabel('Time, (s)')
         plt.ylabel('X2, (cm)')
+        plt.figtext(0.5, -0.10, figure_txt, wrap=True, horizontalalignment='center', fontsize=12)
+        plt.show()
+
+    if '9' in output:
+        # Graph path of car
+        plt.title('Path of the RC Car')
+        plt.plot(car.x1, car.x2, label='True')
+        plt.legend(loc='upper left')
+        plt.xlabel('X1, (cm)')
+        plt.ylabel('X2, (cm)')
+        plt.figtext(0.5, -0.10, figure_txt, wrap=True, horizontalalignment='center', fontsize=12)
         plt.show()
 
     if 'a' in output:
@@ -412,6 +436,7 @@ def graph_car(car, car_data, output):
         plt.xlabel('Time, (s)')
         plt.ylabel('V1, (cm\s)')
         plt.legend(loc='upper left')
+        plt.figtext(0.5, -0.10, figure_txt, wrap=True, horizontalalignment='center', fontsize=12)
         plt.show()
 
     if 'b' in output:
@@ -424,12 +449,14 @@ def graph_car(car, car_data, output):
         plt.legend(loc='upper left')
         plt.xlabel('Time, (s)')
         plt.ylabel('V2, (cm\s)')
+        plt.figtext(0.5, -0.10, figure_txt, wrap=True, horizontalalignment='center', fontsize=12)
         plt.show()
 
 
-def graph_boxplot(data, data_names):
+def graph_boxplot(data, data_names, figure_txt):
     # Graphs box plots
     plt.title('Distances for Position')
     plt.boxplot(data, showfliers=False, labels=data_names)
     plt.ylabel("Distance")
+    plt.figtext(0.5, -0.10, figure_txt, wrap=True, horizontalalignment='center', fontsize=12)
     plt.show()
