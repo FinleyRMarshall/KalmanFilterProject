@@ -23,4 +23,13 @@ c_figure_txt = [
     'Figure 14',
     'Figure 15',
     'Figure 16',
+    'Figure 17',
+    'Figure 18',
+    'Figure 19',
+    'Figure 20',
+]
+
+c_plt_titles = [
+    'Analysis of Position Estimates',
+    'Analysis of Velocity Estimates'
 ]

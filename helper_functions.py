@@ -310,3 +310,29 @@ def rc_car_example(h=1, k=0.1, r=60, loop_count=3028, control_file='controls/tra
 
     car.close_file()
     return car, car_data
+
+
+def car_position_analysis(cars, txt, title):
+    measurement_distance_data = []
+    gps_distance_data = []
+
+    for i in range(cars):
+        car, car_data = rc_car_example()
+        measurement_distance, model_distance = graph_car(car, car_data, txt, output='0')
+        measurement_distance_data += measurement_distance
+        gps_distance_data += model_distance
+
+    graph_boxplot([measurement_distance_data, gps_distance_data], ['GPS Measurements', 'Estimates'], txt, title)
+
+
+def car_velocity_analysis(cars, txt, title):
+    v1_distance = []
+    v2_distance = []
+
+    for i in range(cars):
+        car, car_data = rc_car_example()
+        model_v1_distance, model_v2_distance = graph_car(car, car_data, txt, output='1')
+        v1_distance += model_v1_distance
+        v2_distance += model_v2_distance
+
+    graph_boxplot([v1_distance, v2_distance], ['V1 Estimates', 'V2 Estimates'], txt, title)
