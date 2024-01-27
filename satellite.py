@@ -101,13 +101,13 @@ class Satellite:
         return x1_measurement if receive else None
 
 
-    def graph(self, show=True, title=None, figure_txt=''):
+    def graph(self, show=True, title=None, figure_txt='', measurements = True):
         # Graphs x1, x2 true cords and the measurements of x1
         # Subplot allows for two graphs side by side. Set show = False for the first graph
         if title is None:
             title = 'True Values of X1, X2 and Measurements of X1'
-
-        plt.plot(self.measurements_times, self.measurements, '.', label='Measurements')
+        if measurements:
+            plt.plot(self.measurements_times, self.measurements, '.', label='Measurements')
         plt.plot(self.times, self.x1, label='X1')
         plt.plot(self.times, self.x2, label='X2')
         plt.title(title)
@@ -118,6 +118,41 @@ class Satellite:
         if show:
             plt.figtext(0.5, -0.10, figure_txt, wrap=True, horizontalalignment='center', fontsize=12)
             plt.show()
+
+
+def satellite_example(h=10, a=(pi * 2)/ 360, r=2, q=0.1, radius=10, revolutions=2, receive_function=always_true, start_angle=None):
+    # Calculates how many times to run the model to get the desired number of revolutions
+    loop_count = satellite_loop_size(h, a, revolutions)
+
+    # The same values as explained before
+    X = np.array([0, 0])
+    F = np.array([[1, -a * h], [h * a, 1]])
+    H = np.array([1, 0]).reshape(1, 2)
+    Q = np.array([[q, 0], [0, q]])
+    R = np.array([r])
+    P = np.array([[radius, 0], [0, radius]])
+
+    kf = KalmanFilter(f=F, h=H, q=Q, r=R, x=X, p=P)
+    satellite = Satellite(a=a, h=h, q=q, r=r, radius=radius, start_angle=start_angle)
+
+    prediction_data = []
+    estimate_data = []
+
+    # Run the model
+    for i in range(loop_count):
+        receive = receive_function(i)
+
+        z = satellite.next_cord(receive=receive)
+
+        x1, x2 = kf.predict()
+        prediction_data.append((x1, x2, kf.p))
+
+        if z is not None:
+            x1, x2 = kf.update(z)
+            estimate_data.append((x1, x2, kf.p))
+
+    return satellite, prediction_data, estimate_data
+
 
 def satellite_analysis(satellites, revolutions, parameter, values, figure_txt, title=None, receive_values=None):
     # Runs the satellite analysis, quite similar to satellite_example
