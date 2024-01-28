@@ -105,14 +105,14 @@ class Satellite:
         # Graphs x1, x2 true cords and the measurements of x1
         # Subplot allows for two graphs side by side. Set show = False for the first graph
         if title is None:
-            title = 'True Values of X1, X2 and Measurements of X1'
+            title = 'True Values of $X_1$, $X_2$ and Measurements of $X_1$'
         if measurements:
             plt.plot(self.measurements_times, self.measurements, '.', label='Measurements')
-        plt.plot(self.times, self.x1, label='X1')
-        plt.plot(self.times, self.x2, label='X2')
+        plt.plot(self.times, self.x1, label='$X_1$')
+        plt.plot(self.times, self.x2, label='$X_2$')
         plt.title(title)
         plt.xlabel("Time")
-        plt.ylabel("X1 and X2")
+        plt.ylabel("$X_1$ and $X_2$")
         plt.legend(loc='upper left')
 
         if show:
