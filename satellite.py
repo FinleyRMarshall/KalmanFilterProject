@@ -5,7 +5,7 @@ from Graph_functions import *
 from measurement_functions import *
 
 
-class KalmanFilter(object):
+class KalmanFilter():
     def __init__(self, f, h, q, r, p, x, b=0, u=0):
         self.f = f
         self.h = h
@@ -251,7 +251,6 @@ def satellite_position_analysis(satellites, revolutions,txt, title, parameter='h
         error_data += x2_error
 
     graph_boxplot([measurement_distance_data, error_data], ['Measurements', 'Estimates'], txt, title)
-
 
 
 def satellite_loop_size(h, a, revolution):

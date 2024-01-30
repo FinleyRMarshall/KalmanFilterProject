@@ -5,7 +5,7 @@ from Graph_functions import *
 from measurement_functions import *
 
 
-class RC_Car_EKF(object):
+class RC_Car_EKF():
     def __init__(self, f, h, q, r, p, x, time_step):
         self.f = f
         self.h = h

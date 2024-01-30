@@ -1,3 +1,5 @@
+import math
+
 import matplotlib.pyplot as plt
 import numpy as np
 from math import sqrt
@@ -229,7 +231,7 @@ def graph_average_error(satellite, prediction_data, estimate_data):
     plt.show()
 
 
-def graph_car(car, car_data, figure_txt, output):
+def graph_car(car, car_data, figure_txt, output, ellipsis_time=math.inf):
     """
     Process the car data, returns or graphs data as required
 
@@ -273,6 +275,7 @@ def graph_car(car, car_data, figure_txt, output):
     v2_p_below = []
 
     offset = 0
+    ellipsis_data = []
 
     ### Process all the data needed for all the graphs
     for num, time in enumerate(car.times):
@@ -312,6 +315,16 @@ def graph_car(car, car_data, figure_txt, output):
         v2_p_below.append(v2 - three_standard_deviations(v2_p))
 
 
+        if time % ellipsis_time == 0 and time != 0:
+            cov = np.array([[p[0][0], p[0][1]],
+                            [p[1][0], p[1][1]]])
+
+            eigenvalues, eigenvectors = np.linalg.eig(cov.T)
+            theta = np.linspace(0, 2 * np.pi, 1000)
+            ellipsis = (np.sqrt(eigenvalues[None, :]) * 3 * eigenvectors) @ [np.sin(theta), np.cos(theta)]
+            ellipsis_data.append((x1, x2, ellipsis))
+
+
         if time in car.measurements_times:
             x1_measurement = car.x1_measurements[num-offset]
             x1_measurements.append(x1_measurement)
@@ -341,9 +354,15 @@ def graph_car(car, car_data, figure_txt, output):
     if '2' in output:
         # Graph path of car and estimate of car
         plt.title('True path and the Estimate path of the RC car.')
+        plt.plot(car_x1, car_x2, label='Estimate')
         plt.plot(car.x1, car.x2, label='True')
         #plt.plot(x1_measurements, x2_measurements,'.', label='GPS Measuements')
-        plt.plot(car_x1, car_x2, label='Estimate')
+
+        for i in ellipsis_data:
+            x1, x2, ellipsis = i
+            plt.fill(ellipsis[0] + x1, ellipsis[1] + x2, color='tab:blue', alpha=0.2)
+            plt.plot(x1, x2, "X", color='tab:red')
+
         plt.legend(loc='upper left')
         plt.xlabel('$X_1$, (cm)')
         plt.ylabel('$X_2$, (cm)')
@@ -403,8 +422,8 @@ def graph_car(car, car_data, figure_txt, output):
     if '7' in output:
         # Graph x1 true and x1 measurement
         plt.title('True values and GPS Measurements of $X_1$')
+        plt.plot(car.measurements_times, x1_measurements, '.', label='GPS Measurements')
         plt.plot(car.times, car.x1, label='True $X_1$')
-        plt.plot(car.measurements_times, x1_measurements,'.', label='GPS Measurements')
         plt.legend(loc='upper left')
         plt.xlabel('Time, (s)')
         plt.ylabel('$X_1$, (cm)')
@@ -414,8 +433,8 @@ def graph_car(car, car_data, figure_txt, output):
     if '8' in output:
         # Graph x2 true and x2 measurement
         plt.title('True values and GPS Measurements of $X_2$')
+        plt.plot(car.measurements_times, x2_measurements, '.', label='GPS Measurements')
         plt.plot(car.times, car.x2, label='True $X_2$')
-        plt.plot(car.measurements_times, x2_measurements,'.', label='GPS Measurements')
         plt.legend(loc='upper left')
         plt.xlabel('Time, (s)')
         plt.ylabel('$X_2$, (cm)')
@@ -425,7 +444,7 @@ def graph_car(car, car_data, figure_txt, output):
     if '9' in output:
         # Graph path of car
         plt.title('Path of the RC Car')
-        plt.plot(car.x1, car.x2, label='True')
+        plt.plot(car.x1, car.x2,color='tab:orange', label='True')
         plt.legend(loc='upper left')
         plt.xlabel('$X_1$, (cm)')
         plt.ylabel('$X_2$, (cm)')
@@ -457,7 +476,7 @@ def graph_car(car, car_data, figure_txt, output):
         plt.legend(loc='upper left')
         plt.xlabel('Time, (s)')
         plt.ylabel('$V_2$, (cm/s)')
-        plt.figtext(0.5, -0.1, figure_txt, wrap=True, horizontalalignment='center', fontsize=10)
+        plt.figtext(0.5, -0.10, figure_txt, wrap=True, horizontalalignment='center', fontsize=10)
         plt.show()
 
 
