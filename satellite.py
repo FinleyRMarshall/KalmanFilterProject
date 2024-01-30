@@ -228,5 +228,31 @@ def satellite_analysis(satellites, revolutions, parameter, values, figure_txt, t
     graph_analysis(data, parameter, figure_txt, title=title)
 
 
+def satellite_position_analysis(satellites, revolutions,txt, title, parameter='h', value=10, receive_function=always_true):
+    measurement_distance_data = []
+    error_data = []
+
+    satellite_parameters = {}
+    satellite_parameters['h'] = 10
+    satellite_parameters['r'] = 2
+    satellite_parameters['q'] = 0.1
+
+    satellite_parameters[parameter] = value
+
+    h = satellite_parameters['h']
+    r = satellite_parameters['r']
+    q = satellite_parameters['q']
+
+    for i in range(satellites):
+        satellite, prediction_data, estimate_data = satellite_example(h=h, r=r, q=q, revolutions = revolutions, receive_function=receive_function)
+        measurement_error, x1_error, x2_error = graph_error(satellite, prediction_data, estimate_data, return_data = True)
+        measurement_distance_data += measurement_error
+        error_data += x1_error
+        error_data += x2_error
+
+    graph_boxplot([measurement_distance_data, error_data], ['Measurements', 'Estimates'], txt, title)
+
+
+
 def satellite_loop_size(h, a, revolution):
     return int((360 // h * revolution) / (a * 360 / (2 * pi)))

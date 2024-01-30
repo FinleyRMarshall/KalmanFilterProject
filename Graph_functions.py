@@ -62,13 +62,14 @@ def graph_x1_and_p(satellite, prediction_data, estimate_data, figure_txt):
         p_below.append(x1_estimate - three_standard_deviations(p))
 
     plt.title('Variance of Estimates for $X_1$')
+    plt.plot(satellite.times, estimate_x1, linestyle="dashed", label='$X_1$ Estimates')
     plt.plot(satellite.times, satellite.x1, label='True $X_1$')
-    plt.plot(satellite.times, estimate_x1, label='$X_1$ Estimates')
-    plt.plot(satellite.times, p_above, label='CI Upper Bound')
-    plt.plot(satellite.times, p_below, label='CI Lower Bound')
+    #plt.plot(satellite.times, p_above, label='CI Upper Bound')
+    #plt.plot(satellite.times, p_below, label='CI Lower Bound')
+    plt.fill_between(satellite.times, p_below, p_above, alpha=0.2, label='CI')
     plt.xlabel('Time')
     plt.ylabel('$X_1$')
-    plt.figtext(0.5, -0.10, figure_txt, wrap=True, horizontalalignment='center', fontsize=12)
+    plt.figtext(0.5, -0.10, figure_txt, wrap=True, horizontalalignment='center', fontsize=10)
     plt.legend(loc='upper left')
     plt.show()
 
@@ -124,13 +125,14 @@ def graph_x2_and_p(satellite, prediction_data, estimate_data, figure_txt):
         p_below.append(x2_estimate - three_standard_deviations(p))
 
     plt.title('Variance of Estimates for $X_2$')
+    plt.plot(satellite.times, estimate_x2, linestyle= "dashed", label='$X_2$ Estimates')
     plt.plot(satellite.times, satellite.x2, label='True $X_2$')
-    plt.plot(satellite.times, estimate_x2, label='$X_2$ Estimates')
-    plt.plot(satellite.times, p_above, label='CI Upper Bound')
-    plt.plot(satellite.times, p_below, label='CI Lower Bound')
+    #plt.plot(satellite.times, p_above, label='CI Upper Bound')
+    #plt.plot(satellite.times, p_below, label='CI Lower Bound')
+    plt.fill_between(satellite.times, p_below, p_above, alpha=0.2, label='CI')
     plt.xlabel('Time')
     plt.ylabel('$X_2$')
-    plt.figtext(0.5, -0.10, figure_txt, wrap=True, horizontalalignment='center', fontsize=12)
+    plt.figtext(0.5, -0.10, figure_txt, wrap=True, horizontalalignment='center', fontsize=10)
     plt.legend(loc='upper left')
     plt.show()
 
@@ -150,11 +152,11 @@ def graph_analysis(data, parameter, figure_txt, title):
 
     plt.xlabel('Time')
     plt.ylabel('Average Distance')
-    plt.figtext(0.5, -0.10, figure_txt, wrap=True, horizontalalignment='center', fontsize=12)
+    plt.figtext(0.5, -0.10, figure_txt, wrap=True, horizontalalignment='center', fontsize=10)
     plt.legend(loc='upper right')
     plt.show()
 
-def graph_error(satellite, prediction_data, estimate_data):
+def graph_error(satellite, prediction_data, estimate_data, return_data = False):
     # Graphs the difference of measurements, x1 estimate and x2 estimates from their true values.
     x1_error = []
     x2_error = []
@@ -168,14 +170,17 @@ def graph_error(satellite, prediction_data, estimate_data):
 
         if time in satellite.measurements_times:
             x1_estimate, x2_estimate, p_estimate = estimate_data[num - offset]
-            measurement_error.append(true_x1 - satellite.measurements[num - offset])
+            measurement_error.append(abs(true_x1 - satellite.measurements[num - offset]))
         else:
             offset += 1
             x1_estimate, x2_estimate, p_estimate = x1_prediction, x2_prediction, p_prediction
 
 
-        x1_error.append(true_x1 - x1_estimate)
-        x2_error.append(true_x2 - x2_estimate)
+        x1_error.append(abs(true_x1 - x1_estimate))
+        x2_error.append(abs(true_x2 - x2_estimate))
+
+    if return_data:
+        return measurement_error, x1_error, x2_error
 
     plt.title('Error of Measurements and $X_1$, $X_2$ Estimates')
     plt.plot(satellite.measurements_times, measurement_error, label='Measurement')
@@ -335,14 +340,14 @@ def graph_car(car, car_data, figure_txt, output):
 
     if '2' in output:
         # Graph path of car and estimate of car
-        plt.title('Path of the RC Car')
+        plt.title('True path and the Estimate path of the RC car.')
         plt.plot(car.x1, car.x2, label='True')
         #plt.plot(x1_measurements, x2_measurements,'.', label='GPS Measuements')
         plt.plot(car_x1, car_x2, label='Estimate')
         plt.legend(loc='upper left')
         plt.xlabel('$X_1$, (cm)')
         plt.ylabel('$X_2$, (cm)')
-        plt.figtext(0.5, -0.10, figure_txt, wrap=True, horizontalalignment='center', fontsize=12)
+        plt.figtext(0.5, -0.10, figure_txt, wrap=True, horizontalalignment='center', fontsize=10)
         plt.show()
 
     if '3' in output:
@@ -353,7 +358,7 @@ def graph_car(car, car_data, figure_txt, output):
         plt.legend(loc='upper left')
         plt.xlabel('Time, (s)')
         plt.ylabel('Distance, (cm)')
-        plt.figtext(0.5, -0.10, figure_txt, wrap=True, horizontalalignment='center', fontsize=12)
+        plt.figtext(0.5, -0.10, figure_txt, wrap=True, horizontalalignment='center', fontsize=10)
         plt.show()
 
     if '4' in output:
@@ -364,33 +369,35 @@ def graph_car(car, car_data, figure_txt, output):
         plt.legend(loc='upper left')
         plt.xlabel('Time, (s)')
         plt.ylabel('Average Distance, (cm)')
-        plt.figtext(0.5, -0.10, figure_txt, wrap=True, horizontalalignment='center', fontsize=12)
+        plt.figtext(0.5, -0.10, figure_txt, wrap=True, horizontalalignment='center', fontsize=10)
         plt.show()
 
     if '5' in output:
         # Graph x1 estimate, x1 true and 99% confidence interval of estimate
         plt.title('Variance of Estimates for $X_1$')
-        plt.plot(car.times, car_x1, label='$X_1$ Estimates')
-        plt.plot(car.times, x1_p_above, label='CI Upper Bound')
-        plt.plot(car.times, x1_p_below, label='CI Lower Bound')
+        plt.plot(car.times, car_x1, linestyle='dotted', label='$X_1$ Estimates')
+        #plt.plot(car.times, x1_p_above, label='CI Upper Bound')
+        #plt.plot(car.times, x1_p_below, label='CI Lower Bound')
         plt.plot(car.times, car.x1, label='True $X_1$')
+        plt.fill_between(car.times, x1_p_below, x1_p_above, alpha=0.2 ,label='CI')
         plt.legend(loc='upper left')
         plt.xlabel('Time, (s)')
         plt.ylabel('$X_1$, (cm)')
-        plt.figtext(0.5, -0.10, figure_txt, wrap=True, horizontalalignment='center', fontsize=12)
+        plt.figtext(0.5, -0.10, figure_txt, wrap=True, horizontalalignment='center', fontsize=10)
         plt.show()
 
     if '6' in output:
         # Graph x2 estimate, x1 true and 99% confidence interval of estimate
         plt.title('Variance of Estimates for $X_2$')
-        plt.plot(car.times, car_x2, label='$X_2$ Estimates')
-        plt.plot(car.times, x2_p_above, label='CI Upper Bound')
-        plt.plot(car.times, x2_p_below, label='CI Lower Bound')
+        plt.plot(car.times, car_x2, linestyle='dotted', label='$X_2$ Estimates')
+        #plt.plot(car.times, x2_p_above, label='CI Upper Bound')
+        #plt.plot(car.times, x2_p_below, label='CI Lower Bound')
         plt.plot(car.times, car.x2, label='True $X_2$')
+        plt.fill_between(car.times, x2_p_below, x2_p_above, alpha=0.2, label='CI')
         plt.legend(loc='upper left')
         plt.xlabel('Time, (s)')
         plt.ylabel('$X_2$, (cm)')
-        plt.figtext(0.5, -0.10, figure_txt, wrap=True, horizontalalignment='center', fontsize=12)
+        plt.figtext(0.5, -0.10, figure_txt, wrap=True, horizontalalignment='center', fontsize=10)
         plt.show()
 
     if '7' in output:
@@ -401,7 +408,7 @@ def graph_car(car, car_data, figure_txt, output):
         plt.legend(loc='upper left')
         plt.xlabel('Time, (s)')
         plt.ylabel('$X_1$, (cm)')
-        plt.figtext(0.5, -0.10, figure_txt, wrap=True, horizontalalignment='center', fontsize=12)
+        plt.figtext(0.5, -0.10, figure_txt, wrap=True, horizontalalignment='center', fontsize=10)
         plt.show()
 
     if '8' in output:
@@ -412,7 +419,7 @@ def graph_car(car, car_data, figure_txt, output):
         plt.legend(loc='upper left')
         plt.xlabel('Time, (s)')
         plt.ylabel('$X_2$, (cm)')
-        plt.figtext(0.5, -0.10, figure_txt, wrap=True, horizontalalignment='center', fontsize=12)
+        plt.figtext(0.5, -0.10, figure_txt, wrap=True, horizontalalignment='center', fontsize=10)
         plt.show()
 
     if '9' in output:
@@ -422,41 +429,42 @@ def graph_car(car, car_data, figure_txt, output):
         plt.legend(loc='upper left')
         plt.xlabel('$X_1$, (cm)')
         plt.ylabel('$X_2$, (cm)')
-        plt.figtext(0.5, -0.10, figure_txt, wrap=True, horizontalalignment='center', fontsize=12)
+        plt.figtext(0.5, -0.10, figure_txt, wrap=True, horizontalalignment='center', fontsize=10)
         plt.show()
 
     if 'a' in output:
         # Graph v1 estimate, v1 true and 99% confidence interval of estimate
-        plt.title('Variance of Estimate for V1')
-        plt.plot(car.times, car_v1, label='Estimates')
-        plt.plot(car.times, v1_p_above, label='CI Upper Bound')
-        plt.plot(car.times, v1_p_below, label='CI Lower Bound')
-        plt.plot(car.times, car.v1, label='True V1')
+        plt.title('Variance of Estimate for $V_1$')
+        plt.plot(car.times, car_v1, linestyle='dotted', label='Estimates')
+        #plt.plot(car.times, v1_p_above, label='CI Upper Bound')
+        #plt.plot(car.times, v1_p_below, label='CI Lower Bound')
+        plt.plot(car.times, car.v1, label='True $V_1$')
+        plt.fill_between(car.times, v1_p_below, v1_p_above, alpha=0.2, label='CI')
         plt.xlabel('Time, (s)')
-        plt.ylabel('V1, (cm/s)')
+        plt.ylabel('$V_1$, (cm/s)')
         plt.legend(loc='upper left')
-        plt.figtext(0.5, -0.10, figure_txt, wrap=True, horizontalalignment='center', fontsize=12)
+        plt.figtext(0.5, -0.10, figure_txt, wrap=True, horizontalalignment='center', fontsize=10)
         plt.show()
 
     if 'b' in output:
         #  Graph v2 estimate, v2 true and 99% confidence interval of estimate
-        plt.title('Variance of Estimate for V2')
-        plt.plot(car.times, car_v2, label='Estimates')
-        plt.plot(car.times, v2_p_above, label='CI Upper Bound')
-        plt.plot(car.times, v2_p_below, label='CI Lower Bound')
-        plt.plot(car.times, car.v2, label='True V2')
+        plt.title('Variance of Estimate for $V_2$')
+        plt.plot(car.times, car_v2, linestyle='dotted', label='Estimates')
+        #plt.plot(car.times, v2_p_above, label='CI Upper Bound')
+        #plt.plot(car.times, v2_p_below, label='CI Lower Bound')
+        plt.plot(car.times, car.v2, label='True $V_2$')
+        plt.fill_between(car.times, v2_p_below, v2_p_above, alpha=0.2, label='CI')
         plt.legend(loc='upper left')
         plt.xlabel('Time, (s)')
-        plt.ylabel('V2, (cm/s)')
-        plt.figtext(0.5, -0.1, figure_txt, wrap=True, horizontalalignment='center', fontsize=12)
+        plt.ylabel('$V_2$, (cm/s)')
+        plt.figtext(0.5, -0.1, figure_txt, wrap=True, horizontalalignment='center', fontsize=10)
         plt.show()
 
 
 def graph_boxplot(data, data_names, figure_txt, title):
     # Graphs box plots
-    plt.figure(figsize=(8, 8))
     plt.title(title)
-    temp = plt.boxplot(data, showfliers=False, labels=data_names)
+    plt.boxplot(data, showfliers=False, labels=data_names)
     plt.ylabel("Distance")
-    plt.figtext(0.5, 0, figure_txt, wrap=True, horizontalalignment='center', fontsize=12)
+    plt.figtext(0.5, -0.1, figure_txt, wrap=True, horizontalalignment='center', fontsize=10)
     plt.show()
