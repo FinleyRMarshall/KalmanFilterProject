@@ -106,17 +106,19 @@ class Satellite:
         # Subplot allows for two graphs side by side. Set show = False for the first graph
         if title is None:
             title = 'True Values of $X_1$, $X_2$ and Measurements of $X_1$'
-        if measurements:
-            plt.plot(self.measurements_times, self.measurements, '.', label='Measurements')
+
         plt.plot(self.times, self.x1, label='$X_1$')
         plt.plot(self.times, self.x2, label='$X_2$')
+        if measurements:
+            plt.plot(self.measurements_times, self.measurements, '.', label='Measurements')
+
         plt.title(title)
         plt.xlabel("Time")
         plt.ylabel("$X_1$ and $X_2$")
         plt.legend(loc='upper left')
 
         if show:
-            plt.figtext(0.5, -0.10, figure_txt, wrap=True, horizontalalignment='center', fontsize=12)
+            plt.figtext(0.5, -0.10, figure_txt, wrap=True, horizontalalignment='center', fontsize=10)
             plt.show()
 
 

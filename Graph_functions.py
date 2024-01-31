@@ -64,8 +64,8 @@ def graph_x1_and_p(satellite, prediction_data, estimate_data, figure_txt):
         p_below.append(x1_estimate - three_standard_deviations(p))
 
     plt.title('Variance of Estimates for $X_1$')
-    plt.plot(satellite.times, estimate_x1, linestyle="dashed", label='$X_1$ Estimates')
-    plt.plot(satellite.times, satellite.x1, label='True $X_1$')
+    plt.plot(satellite.times, satellite.x1,color='tab:orange', label='True $X_1$')
+    plt.plot(satellite.times, estimate_x1,color='tab:blue', linestyle="dashed", label='$X_1$ Estimates')
     #plt.plot(satellite.times, p_above, label='CI Upper Bound')
     #plt.plot(satellite.times, p_below, label='CI Lower Bound')
     plt.fill_between(satellite.times, p_below, p_above, alpha=0.2, label='CI')
@@ -127,8 +127,8 @@ def graph_x2_and_p(satellite, prediction_data, estimate_data, figure_txt):
         p_below.append(x2_estimate - three_standard_deviations(p))
 
     plt.title('Variance of Estimates for $X_2$')
-    plt.plot(satellite.times, estimate_x2, linestyle= "dashed", label='$X_2$ Estimates')
-    plt.plot(satellite.times, satellite.x2, label='True $X_2$')
+    plt.plot(satellite.times, satellite.x2,color='tab:orange', label='True $X_2$')
+    plt.plot(satellite.times, estimate_x2, color='tab:blue', linestyle= "dashed", label='$X_2$ Estimates')
     #plt.plot(satellite.times, p_above, label='CI Upper Bound')
     #plt.plot(satellite.times, p_below, label='CI Lower Bound')
     plt.fill_between(satellite.times, p_below, p_above, alpha=0.2, label='CI')
@@ -354,14 +354,14 @@ def graph_car(car, car_data, figure_txt, output, ellipsis_time=math.inf):
     if '2' in output:
         # Graph path of car and estimate of car
         plt.title('True path and the Estimate path of the RC car.')
-        plt.plot(car_x1, car_x2, label='Estimate')
-        plt.plot(car.x1, car.x2, label='True')
+        plt.plot(car.x1, car.x2, color='tab:orange', label='True')
+        plt.plot(car_x1, car_x2, color='tab:blue', label='Estimate')
         #plt.plot(x1_measurements, x2_measurements,'.', label='GPS Measuements')
 
         for i in ellipsis_data:
             x1, x2, ellipsis = i
             plt.fill(ellipsis[0] + x1, ellipsis[1] + x2, color='tab:blue', alpha=0.2)
-            plt.plot(x1, x2, "X", color='tab:red')
+            plt.plot(x1, x2, "x", color='tab:red')
 
         plt.legend(loc='upper left')
         plt.xlabel('$X_1$, (cm)')
@@ -394,10 +394,10 @@ def graph_car(car, car_data, figure_txt, output, ellipsis_time=math.inf):
     if '5' in output:
         # Graph x1 estimate, x1 true and 99% confidence interval of estimate
         plt.title('Variance of Estimates for $X_1$')
-        plt.plot(car.times, car_x1, linestyle='dotted', label='$X_1$ Estimates')
+        plt.plot(car.times, car.x1, color='tab:orange', label='True $X_1$')
+        plt.plot(car.times, car_x1, linestyle='dotted', color='tab:blue', label='$X_1$ Estimates')
         #plt.plot(car.times, x1_p_above, label='CI Upper Bound')
         #plt.plot(car.times, x1_p_below, label='CI Lower Bound')
-        plt.plot(car.times, car.x1, label='True $X_1$')
         plt.fill_between(car.times, x1_p_below, x1_p_above, alpha=0.2 ,label='CI')
         plt.legend(loc='upper left')
         plt.xlabel('Time, (s)')
@@ -408,10 +408,10 @@ def graph_car(car, car_data, figure_txt, output, ellipsis_time=math.inf):
     if '6' in output:
         # Graph x2 estimate, x1 true and 99% confidence interval of estimate
         plt.title('Variance of Estimates for $X_2$')
-        plt.plot(car.times, car_x2, linestyle='dotted', label='$X_2$ Estimates')
+        plt.plot(car.times, car.x2, color='tab:orange', label='True $X_2$')
+        plt.plot(car.times, car_x2, linestyle='dotted', color='tab:blue', label='$X_2$ Estimates')
         #plt.plot(car.times, x2_p_above, label='CI Upper Bound')
         #plt.plot(car.times, x2_p_below, label='CI Lower Bound')
-        plt.plot(car.times, car.x2, label='True $X_2$')
         plt.fill_between(car.times, x2_p_below, x2_p_above, alpha=0.2, label='CI')
         plt.legend(loc='upper left')
         plt.xlabel('Time, (s)')
@@ -454,10 +454,10 @@ def graph_car(car, car_data, figure_txt, output, ellipsis_time=math.inf):
     if 'a' in output:
         # Graph v1 estimate, v1 true and 99% confidence interval of estimate
         plt.title('Variance of Estimate for $V_1$')
-        plt.plot(car.times, car_v1, linestyle='dotted', label='Estimates')
+        plt.plot(car.times, car.v1,color='tab:orange', label='True $V_1$')
+        plt.plot(car.times, car_v1, linestyle='dotted',color='tab:blue', label='Estimates')
         #plt.plot(car.times, v1_p_above, label='CI Upper Bound')
         #plt.plot(car.times, v1_p_below, label='CI Lower Bound')
-        plt.plot(car.times, car.v1, label='True $V_1$')
         plt.fill_between(car.times, v1_p_below, v1_p_above, alpha=0.2, label='CI')
         plt.xlabel('Time, (s)')
         plt.ylabel('$V_1$, (cm/s)')
@@ -468,10 +468,10 @@ def graph_car(car, car_data, figure_txt, output, ellipsis_time=math.inf):
     if 'b' in output:
         #  Graph v2 estimate, v2 true and 99% confidence interval of estimate
         plt.title('Variance of Estimate for $V_2$')
-        plt.plot(car.times, car_v2, linestyle='dotted', label='Estimates')
+        plt.plot(car.times, car.v2,color='tab:orange', label='True $V_2$')
+        plt.plot(car.times, car_v2, linestyle='dotted',color='tab:blue', label='Estimates')
         #plt.plot(car.times, v2_p_above, label='CI Upper Bound')
         #plt.plot(car.times, v2_p_below, label='CI Lower Bound')
-        plt.plot(car.times, car.v2, label='True $V_2$')
         plt.fill_between(car.times, v2_p_below, v2_p_above, alpha=0.2, label='CI')
         plt.legend(loc='upper left')
         plt.xlabel('Time, (s)')
