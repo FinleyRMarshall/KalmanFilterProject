@@ -231,7 +231,7 @@ def graph_average_error(satellite, prediction_data, estimate_data):
     plt.show()
 
 
-def graph_car(car, car_data, figure_txt, output, ellipsis_time=math.inf):
+def graph_car(car, car_data, figure_txt, output, ellipse_time=math.inf):
     """
     Process the car data, returns or graphs data as required
 
@@ -275,7 +275,7 @@ def graph_car(car, car_data, figure_txt, output, ellipsis_time=math.inf):
     v2_p_below = []
 
     offset = 0
-    ellipsis_data = []
+    ellipse_data = []
 
     ### Process all the data needed for all the graphs
     for num, time in enumerate(car.times):
@@ -315,14 +315,14 @@ def graph_car(car, car_data, figure_txt, output, ellipsis_time=math.inf):
         v2_p_below.append(v2 - three_standard_deviations(v2_p))
 
 
-        if time % ellipsis_time == 0 and time != 0:
+        if time % ellipse_time == 0 and time != 0:
             cov = np.array([[p[0][0], p[0][1]],
                             [p[1][0], p[1][1]]])
 
             eigenvalues, eigenvectors = np.linalg.eig(cov.T)
             theta = np.linspace(0, 2 * np.pi, 1000)
-            ellipsis = (np.sqrt(eigenvalues[None, :]) * 3 * eigenvectors) @ [np.sin(theta), np.cos(theta)]
-            ellipsis_data.append((x1, x2, ellipsis))
+            ellipse = (np.sqrt(eigenvalues[None, :]) * 3 * eigenvectors) @ [np.sin(theta), np.cos(theta)]
+            ellipse_data.append((x1, x2, ellipse))
 
 
         if time in car.measurements_times:
@@ -358,9 +358,9 @@ def graph_car(car, car_data, figure_txt, output, ellipsis_time=math.inf):
         plt.plot(car_x1, car_x2, color='tab:blue', label='Estimate')
         #plt.plot(x1_measurements, x2_measurements,'.', label='GPS Measuements')
 
-        for i in ellipsis_data:
-            x1, x2, ellipsis = i
-            plt.fill(ellipsis[0] + x1, ellipsis[1] + x2, color='tab:blue', alpha=0.2)
+        for i in ellipse_data:
+            x1, x2, ellipse = i
+            plt.fill(ellipse[0] + x1, ellipse[1] + x2, color='tab:blue', alpha=0.2)
             plt.plot(x1, x2, "x", color='tab:red')
 
         plt.legend(loc='upper left')

@@ -100,6 +100,120 @@ class RC_car:
         return x1_measurement, x2_measurement, alpha + np.random.normal(0,self.alpha_variance), theta + np.random.normal(0, self.theta_variance)
 
 
+class RC_car:
+    def __init__(self, k=0.1, h=1, r=60, alpha_variance=0.1, theta_variance=0.01, control_file=None):
+        self.k = k  # Drag
+        self.h = h  # Time step
+        self.r = r
+        self.alpha_variance = alpha_variance
+        self.theta_variance = theta_variance
+
+        self.x1 = [0]
+        self.x2 = [0]
+        self.v1 = [1]
+        self.v2 = [0]
+
+        self.times = [0]
+        self.current_time = 0
+
+        self.x1_measurements = []
+        self.x2_measurements = []
+        self.measurements_times = []
+
+        self.file = open(control_file, 'r')
+
+    def close_file(self):
+        self.file.close()
+
+    def next_movement(self, receive):
+        self.current_time += self.h
+        self.times.append(self.current_time)
+
+        controls = self.file.readline()
+        if controls == '':  # End of file, no more control inputs
+            controls = '0 0'
+        alpha, theta = controls.split()
+        alpha = float(alpha)
+        theta = float(theta)
+        f = np.array([[1, 0, self.h, 0], [0, 1, 0, self.h], [0, 0, 1 - self.k * self.h, 0], [0, 0, 0, 1 - self.k * self.h]])
+        x = np.array([self.x1[-1], self.x2[-1], self.v1[-1], self.v2[-1]])
+        x1, x2, v1, v2 = np.dot(f, x) + rc_car_control_input_model(x, self.h, alpha, theta)
+
+        self.x1.append(x1)
+        self.x2.append(x2)
+        self.v1.append(v1)
+        self.v2.append(v2)
+
+        # If the model is to receive a measurement, process the measurement, else give None
+        x1_measurement = None
+        x2_measurement = None
+        if receive:
+            x1_measurement = x1 + np.random.normal(0, self.r)
+            x2_measurement = x2 + np.random.normal(0, self.r)
+            self.x1_measurements.append(x1_measurement)
+            self.x2_measurements.append(x2_measurement)
+            self.measurements_times.append(self.current_time)
+
+        return x1_measurement, x2_measurement, alpha + np.random.normal(0,self.alpha_variance), theta + np.random.normal(0, self.theta_variance)
+
+
+class RC_car:
+    def __init__(self, k=0.1, h=1, r=60, alpha_variance=0.1, theta_variance=0.01, control_file=None):
+        self.k = k  # Drag
+        self.h = h  # Time step
+        self.r = r
+        self.alpha_variance = alpha_variance
+        self.theta_variance = theta_variance
+
+        self.x1 = [0]
+        self.x2 = [0]
+        self.v1 = [1]
+        self.v2 = [0]
+
+        self.times = [0]
+        self.current_time = 0
+
+        self.x1_measurements = []
+        self.x2_measurements = []
+        self.measurements_times = []
+
+        self.file = open(control_file, 'r')
+
+    def close_file(self):
+        self.file.close()
+
+    def next_movement(self, receive):
+        self.current_time += self.h
+        self.times.append(self.current_time)
+
+        controls = self.file.readline()
+        if controls == '':  # End of file, no more control inputs
+            controls = '0 0'
+        alpha, theta = controls.split()
+        alpha = float(alpha)
+        theta = float(theta)
+        f = np.array([[1, 0, self.h, 0], [0, 1, 0, self.h], [0, 0, 1 - self.k * self.h, 0], [0, 0, 0, 1 - self.k * self.h]])
+        x = np.array([self.x1[-1], self.x2[-1], self.v1[-1], self.v2[-1]])
+        x1, x2, v1, v2 = np.dot(f, x) + rc_car_control_input_model(x, self.h, alpha, theta)
+
+        self.x1.append(x1)
+        self.x2.append(x2)
+        self.v1.append(v1)
+        self.v2.append(v2)
+
+        # If the model is to receive a measurement, process the measurement, else give None
+        x1_measurement = None
+        x2_measurement = None
+        if receive:
+            x1_measurement = x1 + np.random.normal(0, self.r)
+            x2_measurement = x2 + np.random.normal(0, self.r)
+            self.x1_measurements.append(x1_measurement)
+            self.x2_measurements.append(x2_measurement)
+            self.measurements_times.append(self.current_time)
+
+        return x1_measurement, x2_measurement, alpha + np.random.normal(0,self.alpha_variance), theta + np.random.normal(0, self.theta_variance)
+
+
 def rc_car_example(h=1, k=0.1, r=60, loop_count=3028, control_file='controls/track_controls.txt',
                    receive_function=every_second, alpha_variance=0.1, theta_variance=0.01):
     F = np.array([[1, 0, h, 0], [0, 1, 0, h], [0, 0, 1 - k * h, 0], [0, 0, 0, 1 - k * h]])
