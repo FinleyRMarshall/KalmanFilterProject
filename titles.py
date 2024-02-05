@@ -18,7 +18,7 @@ s_plt_titles = [
 
 c_figure_txt = [
     'Figure 9: The RC car\'s path around a realistic racetrack. We use this exact path throughout the report.',
-    'Figure 10: Compare the estimates using the noisy controls to the true path of the RC car. Notice how quickly the two paths diverge. Our EKF model will be supplied with these noisy controls.',
+    'Figure 10: Compare the estimate using the noisy controls to the true path of the RC car. Notice how quickly the two paths diverge. Our EKF model will be supplied with these noisy controls.',
     'Figure 11: The GPS measurements being observed when the RC car travels in a straight line. We can see how noisy these GPS measurements are. Our EKF model will be supplied with these noisy GPS measurements.',
     'Figure 12: View the model\'s position estimates when the RC car travels in a straight line. The 99% CI of the position estimates are shown every 200 seconds',
     'Figure 13: View the model\'s position estimates when the RC car travels around a corner. The 99% CI of the position estimates are shown every 50 seconds',
@@ -27,8 +27,8 @@ c_figure_txt = [
     'Figure 16: The model\'s position estimates for $X_2$ and the CI of the estimates. We can see the true values for $X_2$ lies inside the CI nearly all the time.',
     'Figure 17: The model\'s velocity estimates for $V_1$ and the CI of the estimates. We observe the true values for $V_1$ lies inside the CI nearly all the time.',
     'Figure 18: The model\'s velocity estimates for $V_2$ and the CI of the estimates. We observe the true values for $V_2$ lies inside the CI nearly all the time.',
-    'Figure 19: A box plot of the position estimates distances and GPS measurements distances. We distinguish the model\'s estimates are significantly more accurate than the measurements.',
-    'Figure 20: A box plot of the velocity estimates distances. Notice the box plots for $V_1$ and $V_2$ are distributed the same and there are no measurements to compare too.',
+    'Figure 19: A box plot of the position estimate distances and GPS measurement distances. We distinguish the model\'s estimates are significantly more accurate than the measurements.',
+    'Figure 20: A box plot of the velocity estimate distances. Notice the box plots for $V_1$ and $V_2$ are distributed the same and there are no measurements to compare too.',
 ]
 
 c_plt_titles = [

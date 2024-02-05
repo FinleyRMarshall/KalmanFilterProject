@@ -1,8 +1,7 @@
 import math
-
 import matplotlib.pyplot as plt
 import numpy as np
-from math import sqrt
+from math import sqrt, pi
 
 
 def average(x, n, a):
@@ -320,7 +319,7 @@ def graph_car(car, car_data, figure_txt, output, ellipse_time=math.inf):
                             [p[1][0], p[1][1]]])
 
             eigenvalues, eigenvectors = np.linalg.eig(cov.T)
-            theta = np.linspace(0, 2 * np.pi, 1000)
+            theta = np.linspace(0, 2 * pi, 500)
             ellipse = (np.sqrt(eigenvalues[None, :]) * 3 * eigenvectors) @ [np.sin(theta), np.cos(theta)]
             ellipse_data.append((x1, x2, ellipse))
 
