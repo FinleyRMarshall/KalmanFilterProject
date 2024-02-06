@@ -321,7 +321,7 @@ def graph_car(car, car_data, figure_txt, output, ellipse_time=math.inf):
             eigenvalues, eigenvectors = np.linalg.eig(cov.T)
             theta = np.linspace(0, 2 * pi, 500)
             ellipse = (np.sqrt(eigenvalues[None, :]) * 3 * eigenvectors) @ [np.sin(theta), np.cos(theta)]
-            ellipse_data.append((x1, x2, ellipse))
+            ellipse_data.append((x1, x2, ellipse, true_x1, true_x2))
 
 
         if time in car.measurements_times:
@@ -358,9 +358,11 @@ def graph_car(car, car_data, figure_txt, output, ellipse_time=math.inf):
         #plt.plot(x1_measurements, x2_measurements,'.', label='GPS Measuements')
 
         for i in ellipse_data:
-            x1, x2, ellipse = i
+            x1, x2, ellipse, true_x1, true_x2 = i
             plt.fill(ellipse[0] + x1, ellipse[1] + x2, color='tab:blue', alpha=0.2)
             plt.plot(x1, x2, "x", color='tab:red')
+            plt.plot(true_x1, true_x2, "x", color='tab:red')
+
 
         plt.legend(loc='upper left')
         plt.xlabel('$X_1$, (cm)')
