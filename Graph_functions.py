@@ -392,7 +392,7 @@ def graph_car(car, car_data, figure_txt, output, ellipse_time=math.inf):
 
     if '5' in output:
         # Graph x1 estimate, x1 true and 99% confidence interval of estimate
-        plt.title('Variance of Estimates for $X_1$')
+        plt.title('Credible Interval of Estimates for $X_1$')
         plt.plot(car.times, car.x1, color='tab:orange', label='True $X_1$')
         plt.plot(car.times, car_x1, linestyle='dotted', color='tab:blue', label='$X_1$ Estimates')
         #plt.plot(car.times, x1_p_above, label='CI Upper Bound')
@@ -406,7 +406,7 @@ def graph_car(car, car_data, figure_txt, output, ellipse_time=math.inf):
 
     if '6' in output:
         # Graph x2 estimate, x1 true and 99% confidence interval of estimate
-        plt.title('Variance of Estimates for $X_2$')
+        plt.title('Credible Interval of Estimates for $X_2$')
         plt.plot(car.times, car.x2, color='tab:orange', label='True $X_2$')
         plt.plot(car.times, car_x2, linestyle='dotted', color='tab:blue', label='$X_2$ Estimates')
         #plt.plot(car.times, x2_p_above, label='CI Upper Bound')
@@ -452,7 +452,7 @@ def graph_car(car, car_data, figure_txt, output, ellipse_time=math.inf):
 
     if 'a' in output:
         # Graph v1 estimate, v1 true and 99% confidence interval of estimate
-        plt.title('Variance of Estimate for $V_1$')
+        plt.title('Credible Interval of Estimates for $V_1$')
         plt.plot(car.times, car.v1,color='tab:orange', label='True $V_1$')
         plt.plot(car.times, car_v1, linestyle='dotted',color='tab:blue', label='Estimates')
         #plt.plot(car.times, v1_p_above, label='CI Upper Bound')
@@ -466,7 +466,7 @@ def graph_car(car, car_data, figure_txt, output, ellipse_time=math.inf):
 
     if 'b' in output:
         #  Graph v2 estimate, v2 true and 99% confidence interval of estimate
-        plt.title('Variance of Estimate for $V_2$')
+        plt.title('Credible Interval of Estimates for $V_2$')
         plt.plot(car.times, car.v2,color='tab:orange', label='True $V_2$')
         plt.plot(car.times, car_v2, linestyle='dotted',color='tab:blue', label='Estimates')
         #plt.plot(car.times, v2_p_above, label='CI Upper Bound')
