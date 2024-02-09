@@ -3,10 +3,10 @@ s_figure_txt = [
     'Figure 2: The measurements being observed by the satellite. We observe that the measurements are spread around the true $X_1$ values.',
     'Figure 3: The model\'s estimates for $X_1$ and the CI of the estimates. We can see the true values for $X_1$ lies inside the CI nearly all the time.',
     'Figure 4: The model\'s estimates for $X_2$ and the CI of the estimates. We can see the true values for $X_2$ lies inside the CI nearly all the time.',
-    'Figure 5: A box plot of the position estimates distances and measurements distances. We distinguish that the model is more accurate and thus performing better than the measurements.',
-    'Figure 6: A box plot of the estimate distances and measurement distances with a larger time step. We see the model still performs better than the measurements.',
-    'Figure 7: A box plot of the estimate distances and measurement distances with a larger measurement variance. We see the model still performs better than the measurements.',
-    'Figure 8: A box plot of the estimate distances and measurement distances with a larger movement variance. We see the model still performs better than the measurements.',
+    'Figure 5: A box plot of the position estimate distances and measurement distances. We distinguish that the model is more accurate and thus performs better than the measurements.',
+    'Figure 6: A box plot of the estimate distances and measurement distances with a larger time step. We see the model performs better than the measurements.',
+    'Figure 7: A box plot of the estimate distances and measurement distances with a larger measurement variance. We see the model performs better than the measurements.',
+    'Figure 8: A box plot of the estimate distances and measurement distances with a larger movement variance. We see the model performs better than the measurements.',
 ]
 
 s_plt_titles = [

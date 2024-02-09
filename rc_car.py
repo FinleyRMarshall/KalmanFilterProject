@@ -150,18 +150,6 @@ def car_position_analysis(cars, txt, title):
         measurement_distance_data += measurement_distance
         gps_distance_data += model_distance
 
-    x = np.quantile(measurement_distance_data, [0, 0.25, 0.5, 0.75, 1])
-    temp = []
-    for i in x:
-        temp.append(int(i))
-    print(temp)
-
-    x = np.quantile(gps_distance_data, [0, 0.25, 0.5, 0.75, 1])
-    temp = []
-    for i in x:
-        temp.append(int(i))
-    print(temp)
-
     graph_boxplot([measurement_distance_data, gps_distance_data], ['GPS Measurements', 'Estimates'], txt, title)
 
 

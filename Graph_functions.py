@@ -62,7 +62,7 @@ def graph_x1_and_p(satellite, prediction_data, estimate_data, figure_txt):
         p_above.append(x1_estimate + three_standard_deviations(p))
         p_below.append(x1_estimate - three_standard_deviations(p))
 
-    plt.title('Variance of Estimates for $X_1$')
+    plt.title('Credible Interval of Estimates for $X_1$')
     plt.plot(satellite.times, satellite.x1,color='tab:orange', label='True $X_1$')
     plt.plot(satellite.times, estimate_x1,color='tab:blue', linestyle="dashed", label='$X_1$ Estimates')
     #plt.plot(satellite.times, p_above, label='CI Upper Bound')
@@ -125,7 +125,7 @@ def graph_x2_and_p(satellite, prediction_data, estimate_data, figure_txt):
         p_above.append(x2_estimate + three_standard_deviations(p))
         p_below.append(x2_estimate - three_standard_deviations(p))
 
-    plt.title('Variance of Estimates for $X_2$')
+    plt.title('Credible Interval of Estimates for $X_2$')
     plt.plot(satellite.times, satellite.x2,color='tab:orange', label='True $X_2$')
     plt.plot(satellite.times, estimate_x2, color='tab:blue', linestyle= "dashed", label='$X_2$ Estimates')
     #plt.plot(satellite.times, p_above, label='CI Upper Bound')
@@ -361,7 +361,7 @@ def graph_car(car, car_data, figure_txt, output, ellipse_time=math.inf):
             x1, x2, ellipse, true_x1, true_x2 = i
             plt.fill(ellipse[0] + x1, ellipse[1] + x2, color='tab:blue', alpha=0.2)
             plt.plot(x1, x2, "x", color='tab:red')
-            plt.plot(true_x1, true_x2, "x", color='tab:red')
+            plt.plot(true_x1, true_x2, "o", color='tab:orange')
 
 
         plt.legend(loc='upper left')
